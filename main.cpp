@@ -150,7 +150,7 @@ int main(int argc, char** argv)
 
 	const size_t N = 11; // Anything larger than 11 takes eons to solve for
 
-	MatrixXd m(N, N);
+	MatrixX<double> m(N, N);
 
 	for (size_t i = 0; i < N; i++)
 	{
