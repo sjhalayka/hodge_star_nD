@@ -110,8 +110,8 @@ public:
 		for (int k = 0; k < N; k++)
 			threads.push_back(thread(thread_func, k, ref(result[k]), ref(vectors)));
 
-		for (size_t i = 0; i < N; i++)
-			threads[i].join();
+		for (size_t k = 0; k < N; k++)
+			threads[k].join();
 
 		return Vector_nD(result);
 	}
