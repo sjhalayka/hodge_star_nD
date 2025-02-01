@@ -16,7 +16,7 @@ public:
 	std::array<double, N> components;
 
 	// Helper function to get the sign of permutation
-	static int permutationSign(const std::array<int, (N - 1)>& perm)
+	static signed int permutationSign(const std::array<int, (N - 1)>& perm)
 	{
 		signed int sign = 1;
 
