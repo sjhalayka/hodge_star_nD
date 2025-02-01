@@ -11,11 +11,11 @@ using namespace std;
 // https://codereview.stackexchange.com/questions/295232/calculating-the-determinant-of-a-matrix-using-a-purely-analytical-method-that-in
 
 
-template<size_t N>
+template<class T, size_t N>
 class Vector_nD
 {
 public:
-	std::array<double, N> components;
+	std::array<T, N> components;
 
 	// Helper function to get the sign of permutation
 	static signed int permutationSign(const std::array<int, (N - 1)>& perm)
@@ -30,28 +30,27 @@ public:
 		return sign;
 	}
 
-	Vector_nD(const std::array<double, N>& comps) : components(comps) 
+	Vector_nD(const std::array<T, N>& comps) : components(comps) 
 	{
 	}
 
 	Vector_nD(void)
 	{
-		for (size_t i = 0; i < N; i++)
-			components[i] = 0;
+		components.fill(0.0);
 	}
 
-	double operator[](size_t index) const 
+	T operator[](size_t index) const 
 	{
 		return components[index];
 	}
 
 	// Hodge star operator?
-	static Vector_nD cross_product(const std::vector<Vector_nD<N>>& vectors)
+	static Vector_nD cross_product(const std::vector<Vector_nD<T, N>>& vectors)
 	{
 		if (vectors.size() != (N - 1))
 			throw std::invalid_argument("nD cross product requires exactly (n - 1) vectors");
 
-		std::array<double, N> result;// = { 0, 0, 0, 0, 0, 0, 0 };
+		std::array<T, N> result;// = { 0, 0, 0, 0, 0, 0, 0 };
 
 		for (size_t i = 0; i < N; i++)
 			result[i] = 0.0;
@@ -73,7 +72,7 @@ public:
 				const signed int sign = permutationSign(baseIndices);
 
 				// Calculate the product for this permutation
-				double product = 1.0;
+				T product = 1.0;
 
 				for (int i = 0; i < (N - 1); i++)
 				{
@@ -92,16 +91,15 @@ public:
 		return Vector_nD(result);
 	}
 
-	static double dot_product(const Vector_nD<N>& a, const Vector_nD<N>& b)
+	static T dot_product(const Vector_nD<T, N>& a, const Vector_nD<T, N>& b)
 	{
 		return inner_product(a.components.begin(), a.components.end(), b.components.begin(), 0.0);
 	}
 };
 
 
-
-template <typename size_t N>
-double determinant_nxn(const MatrixXd& m)
+template <class T, typename size_t N>
+T determinant_nxn(const MatrixXd& m)
 {
 	if (m.cols() != m.rows())
 	{
@@ -110,17 +108,17 @@ double determinant_nxn(const MatrixXd& m)
 	}
 
 	// We will use this vector later, in the dot product operation
-	Vector_nD<N> a_vector;
+	Vector_nD<T, N> a_vector;
 
 	for (size_t i = 0; i < N; i++)
 		a_vector.components[i] = m(0, i);
 
 	// We will use these (N - 1) vectors later, in the cross product operation
-	std::vector<Vector_nD<N>> input_vectors;
+	std::vector<Vector_nD<T, N>> input_vectors;
 
 	for (size_t i = 1; i < N; i++)
 	{
-		Vector_nD<N> b_vector;
+		Vector_nD<T, N> b_vector;
 
 		for (size_t j = 0; j < N; j++)
 			b_vector.components[j] = m(i, j);
@@ -129,14 +127,14 @@ double determinant_nxn(const MatrixXd& m)
 	}
 
 	// Compute the cross product using (N - 1) vectors
-	Vector_nD<N> result = Vector_nD<N>::cross_product(input_vectors);
+	Vector_nD<T, N> result = Vector_nD<T, N>::cross_product(input_vectors);
 
 	// Flip handedness
 	for (size_t i = 0; i < result.components.size(); i++)
 		if (i % 2 == 1)
 			result.components[i] = -result.components[i];
 
-	double det = Vector_nD<N>::dot_product(a_vector, result);
+	T det = Vector_nD<T, N>::dot_product(a_vector, result);
 
 	// These numbers should match
 	cout << det << endl;
@@ -144,7 +142,6 @@ double determinant_nxn(const MatrixXd& m)
 
 	return det;
 }
-
 
 
 int main(int argc, char** argv)
@@ -166,7 +163,7 @@ int main(int argc, char** argv)
 		}
 	}
 
-	determinant_nxn<N>(m);
+	determinant_nxn<double, N>(m);
 
 	return 0;
 }
