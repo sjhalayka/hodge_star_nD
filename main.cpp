@@ -18,16 +18,19 @@ public:
 	std::array<T, N> components;
 
 	// Helper function to get the sign of permutation
-	static signed int permutationSign(const std::array<int, (N - 1)>& perm)
+	static signed char permutation_sign(const std::array<int, (N - 1)>& perm)
 	{
-		signed int sign = 1;
+		bool sign = true;
 
 		for (int i = 0; i < (N - 2); i++)
 			for (int j = i + 1; j < (N - 1); j++)
 				if (perm[i] > perm[j])
-					sign = -sign;
+					sign = !sign;
 
-		return sign;
+		if (sign)
+			return 1;
+		else
+			return -1;
 	}
 
 	Vector_nD(const std::array<T, N>& comps) : components(comps) 
@@ -69,7 +72,7 @@ public:
 			do
 			{
 				// Calculate sign of this term
-				const signed int sign = permutationSign(baseIndices);
+				const signed char sign = permutation_sign(baseIndices);
 
 				// Calculate the product for this permutation
 				T product = 1.0;
@@ -77,8 +80,15 @@ public:
 				for (int i = 0; i < (N - 1); i++)
 				{
 					const int col = baseIndices[i];
+
 					// Adjust column index if it's past k
-					const int actualCol = (col >= k) ? col + 1 : col;
+					int actualCol = 0;
+					
+					if (col < k)
+						actualCol = col;
+					else
+						actualCol = col + 1;
+
 					product *= vectors[i][actualCol];
 				}
 
