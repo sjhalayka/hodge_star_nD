@@ -7,6 +7,7 @@ using namespace std;
 
 
 // https://claude.ai/chat/3caf4077-28b5-497f-b704-1b0c336a104d
+// https://codereview.stackexchange.com/questions/295232/calculating-the-determinant-of-a-matrix-using-a-purely-analytical-method-that-in
 
 
 template<size_t N>
