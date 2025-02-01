@@ -51,7 +51,10 @@ public:
 	static Vector_nD cross_product(const std::vector<Vector_nD<T, N>>& vectors)
 	{
 		if (vectors.size() != (N - 1))
-			throw std::invalid_argument("nD cross product requires exactly (n - 1) vectors");
+		{
+			cout << "nD cross product requires exactly (n - 1) input vectors" << endl;
+			return Vector_nD<T, N>();
+		}
 
 		std::array<T, N> result;// = { 0, 0, 0, 0, 0, 0, 0 };
 
@@ -59,10 +62,10 @@ public:
 			result[i] = 0.0;
 
 		// These are the indices we'll use for each component calculation
-		std::array<int, (N - 1)> baseIndices;// = { 0, 1, 2, 3, 4, 5 };
+		std::array<int, (N - 1)> base_indices;// = { 0, 1, 2, 3, 4, 5 };
 
 		for (int i = 0; i < (N - 1); i++)
-			baseIndices[i] = i;
+			base_indices[i] = i;
 
 		// For each component of the result vector
 		for (int k = 0; k < N; k++)
@@ -72,30 +75,29 @@ public:
 			do
 			{
 				// Calculate sign of this term
-				const signed char sign = permutation_sign(baseIndices);
+				const signed char sign = permutation_sign(base_indices);
 
 				// Calculate the product for this permutation
 				T product = 1.0;
 
 				for (int i = 0; i < (N - 1); i++)
 				{
-					const int col = baseIndices[i];
+					const int col = base_indices[i];
 
 					// Adjust column index if it's past k
-					int actualCol = 0;
+					int actual_col = 0;
 					
 					if (col < k)
-						actualCol = col;
+						actual_col = col;
 					else
-						actualCol = col + 1;
+						actual_col = col + 1;
 
-					product *= vectors[i][actualCol];
+					product *= vectors[i][actual_col];
 				}
 
 				result[k] += sign * product;
-
 			} 
-			while (std::next_permutation(baseIndices.begin(), baseIndices.end()));
+			while (std::next_permutation(base_indices.begin(), base_indices.end()));
 		}
 
 		return Vector_nD(result);
