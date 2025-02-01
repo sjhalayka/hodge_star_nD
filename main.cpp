@@ -39,8 +39,8 @@ public:
 			components[i] = 0;
 	}
 
-	double operator[](size_t index) const {
-		if (index >= N) throw std::out_of_range("Index out of bounds");
+	double operator[](size_t index) const 
+	{
 		return components[index];
 	}
 
