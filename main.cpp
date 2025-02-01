@@ -18,14 +18,14 @@ public:
 	// Helper function to get the sign of permutation
 	static int permutationSign(const std::array<int, (N - 1)>& perm)
 	{
-		int inversions = 0;
+		signed int sign = 1;
 
 		for (int i = 0; i < (N - 2); i++)
 			for (int j = i + 1; j < (N - 1); j++)
 				if (perm[i] > perm[j])
-					inversions++;
+					sign = -sign;
 
-		return (inversions % 2 == 0) ? 1 : -1;
+		return sign;
 	}
 
 	Vector_nD(const std::array<double, N>& comps) : components(comps) 
