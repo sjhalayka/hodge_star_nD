@@ -3,6 +3,7 @@ using namespace Eigen;
 
 #include <iostream>
 #include <vector>
+#include <numeric>
 using namespace std;
 
 
@@ -69,7 +70,7 @@ public:
 			do
 			{
 				// Calculate sign of this term
-				const int sign = permutationSign(baseIndices);
+				const signed int sign = permutationSign(baseIndices);
 
 				// Calculate the product for this permutation
 				double product = 1.0;
@@ -84,11 +85,8 @@ public:
 
 				result[k] += sign * product;
 
-			} while (std::next_permutation(baseIndices.begin(), baseIndices.end()));
-
-			// Reset indices for next component
-			for (int i = 0; i < (N - 1); i++)
-				baseIndices[i] = i;
+			} 
+			while (std::next_permutation(baseIndices.begin(), baseIndices.end()));
 		}
 
 		return Vector_nD(result);
@@ -96,12 +94,7 @@ public:
 
 	static double dot_product(const Vector_nD<N>& a, const Vector_nD<N>& b)
 	{
-		double dot_prod = 0;
-
-		for (size_t i = 0; i < N; i++)
-			dot_prod += a[i] * b[i];
-
-		return dot_prod;
+		return inner_product(a.components.begin(), a.components.end(), b.components.begin(), 0.0);
 	}
 };
 
