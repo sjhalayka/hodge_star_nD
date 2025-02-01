@@ -14,16 +14,6 @@ using namespace std;
 // https://codereview.stackexchange.com/questions/295232/calculating-the-determinant-of-a-matrix-using-a-purely-analytical-method-that-in
 
 
-
-
-
-
-
-
-
-
-
-
 template<class T, size_t N>
 class Vector_nD
 {
@@ -183,7 +173,7 @@ int main(int argc, char** argv)
 {
 	srand(static_cast<unsigned int>(time(0)));
 
-	const size_t N = 11; // Anything larger than 11 takes eons to solve for
+	const size_t N = 12; // Anything larger than 12 takes eons to solve for
 
 	MatrixX<double> m(N, N);
 
