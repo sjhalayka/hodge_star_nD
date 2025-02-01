@@ -132,13 +132,13 @@ T determinant_nxn(const MatrixXd& m)
 		return 0;
 	}
 
-	// We will use this vector later, in the dot product operation
+	// We will use this N-vector later, in the dot product operation
 	Vector_nD<T, N> a_vector;
 
 	for (size_t i = 0; i < N; i++)
 		a_vector.components[i] = m(0, i);
 
-	// We will use these (N - 1) vectors later, in the cross product operation
+	// We will use these (N - 1) N-vectors later, in the cross product operation
 	std::vector<Vector_nD<T, N>> input_vectors;
 
 	for (size_t i = 1; i < N; i++)
@@ -173,7 +173,7 @@ int main(int argc, char** argv)
 {
 	srand(static_cast<unsigned int>(time(0)));
 
-	const size_t N = 12; // Anything larger than 12 takes eons to solve for
+	const size_t N = 11; // Anything larger than 12 takes eons to solve for
 
 	MatrixX<double> m(N, N);
 
