@@ -25,7 +25,7 @@ public:
 		result = 0;
 
 		// These are the indices we'll use for each component calculation
-		std::array<int, (N - 1)> base_indices;// = { 0, 1, 2, 3, 4, 5 };
+		std::array<int, (N - 1)> base_indices;
 
 		for (int i = 0; i < (N - 1); i++)
 			base_indices[i] = i;
