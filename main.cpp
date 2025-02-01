@@ -90,7 +90,7 @@ public:
 		return components[index];
 	}
 
-	// Hodge star operator?
+	// Hodge star operator, where k = n - 1
 	static Vector_nD cross_product(const std::vector<Vector_nD<T, N>>& vectors)
 	{
 		if (vectors.size() != (N - 1))
