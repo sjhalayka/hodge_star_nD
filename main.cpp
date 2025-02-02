@@ -8,6 +8,8 @@ using namespace Eigen;
 #include <string>
 #include <thread>
 #include <sstream>
+#include <algorithm>
+#include <array>
 using namespace std;
 
 
@@ -19,10 +21,10 @@ template<class T, size_t N>
 class Vector_nD
 {
 public:
-	std::array<T, N> components;
+	array<T, N> components;
 
 	// Helper function to get the sign of permutation
-	static signed char permutation_sign(const std::array<int, (N - 1)>& perm)
+	static signed char permutation_sign(const array<int, (N - 1)>& perm)
 	{
 		bool sign = true;
 
@@ -37,7 +39,7 @@ public:
 			return -1;
 	}
 
-	Vector_nD(const std::array<T, N>& comps) : components(comps)
+	Vector_nD(const array<T, N>& comps) : components(comps)
 	{
 	}
 
@@ -52,7 +54,7 @@ public:
 	}
 
 	// Hodge star operator, where k = n - 1
-	static Vector_nD cross_product(const std::vector<Vector_nD<T, N>>& vectors)
+	static Vector_nD cross_product(const vector<Vector_nD<T, N>>& vectors)
 	{
 		if (vectors.size() != (N - 1))
 		{
@@ -60,13 +62,13 @@ public:
 			return Vector_nD<T, N>();
 		}
 
-		std::array<T, N> result;
+		array<T, N> result;
 
 		for (size_t i = 0; i < N; i++)
 			result[i] = 0.0;
 
 		// These are the indices we'll use for each component calculation
-		std::array<int, (N - 1)> base_indices;
+		array<int, (N - 1)> base_indices;
 
 		for (int i = 0; i < (N - 1); i++)
 			base_indices[i] = i;
@@ -108,7 +110,7 @@ public:
 
 				result[k] += sign * product;
 
-			} while (std::next_permutation(base_indices.begin(), base_indices.end()));
+			} while (next_permutation(base_indices.begin(), base_indices.end()));
 		}
 
 		// Flip handedness
@@ -166,7 +168,7 @@ T determinant_nxn(const MatrixXd& m)
 		a_vector.components[i] = m(0, i);
 
 	// We will use these (N - 1) N-vectors later, in the cross product operation
-	std::vector<Vector_nD<T, N>> input_vectors;
+	vector<Vector_nD<T, N>> input_vectors;
 
 	for (size_t i = 1; i < N; i++)
 	{
