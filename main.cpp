@@ -106,10 +106,12 @@ public:
 
 		vector<thread> threads;
 
-		// For each component of the result vector
+		// For each component of the result vector,
+		// start a new thread
 		for (int i = 0; i < N; i++)
 			threads.push_back(thread(thread_func, i, ref(result[i]), ref(vectors)));
 
+		// Wait for threads to finish
 		for (size_t i = 0; i < N; i++)
 			threads[i].join();
 
