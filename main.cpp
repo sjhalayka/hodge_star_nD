@@ -5,8 +5,9 @@ using namespace Eigen;
 #include <vector>
 #include <numeric>
 #include <mutex>
+#include <string>
 #include <thread>
-
+#include <sstream>
 using namespace std;
 
 
@@ -64,13 +65,6 @@ public:
 		for (size_t i = 0; i < N; i++)
 			result[i] = 0.0;
 
-		vector<thread> threads;
-
-		size_t max_threads = 1;
-
-
-		//result = 0;
-
 		// These are the indices we'll use for each component calculation
 		std::array<int, (N - 1)> base_indices;
 
@@ -88,6 +82,7 @@ public:
 
 				// Calculate the product for this permutation
 				T product = 1.0;
+				ostringstream product_oss;
 
 				for (int i = 0; i < (N - 1); i++)
 				{
@@ -101,12 +96,15 @@ public:
 					else
 						actual_col = col + 1;
 
-					//cout << i << " " << actual_col << endl;
+					product_oss << "v(" << i << ", " << actual_col << ") ";
 
 					product *= vectors[i][actual_col];
 				}
 
-				//cout << sign << " " << product << endl << endl;
+				if(sign == 1)
+					cout << " + " << product_oss.str() << endl;
+				else
+					cout << " - " << product_oss.str() << endl;
 
 				result[k] += sign * product;
 
@@ -173,7 +171,7 @@ int main(int argc, char** argv)
 {
 	srand(static_cast<unsigned int>(time(0)));
 
-	const size_t N = 11; // Anything larger than 12 takes eons to solve for
+	const size_t N = 3; // Anything larger than 12 takes eons to solve for
 
 	MatrixX<double> m(N, N);
 
