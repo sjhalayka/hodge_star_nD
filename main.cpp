@@ -102,9 +102,9 @@ public:
 				}
 
 				if(sign == 1)
-					cout << " + " << product_oss.str() << endl;
+					cout << "result[" << k << "] += " << product_oss.str() << endl;
 				else
-					cout << " - " << product_oss.str() << endl;
+					cout << "result[" << k << "] -= " << product_oss.str() << endl;
 
 				result[k] += sign * product;
 
