@@ -37,7 +37,7 @@ public:
 			return -1;
 	}
 
-	Vector_nD(const std::array<T, N>& comps) : components(comps) 
+	Vector_nD(const std::array<T, N>& comps) : components(comps)
 	{
 	}
 
@@ -46,7 +46,7 @@ public:
 		components.fill(0.0);
 	}
 
-	T operator[](size_t index) const 
+	T operator[](size_t index) const
 	{
 		return components[index];
 	}
@@ -101,8 +101,8 @@ public:
 					product *= vectors[i][actual_col];
 				}
 
-				if(sign == 1)
-					cout << "result[" << k << "] += " << product_oss.str() << endl;				
+				if (sign == 1)
+					cout << "result[" << k << "] += " << product_oss.str() << endl;
 				else
 					cout << "result[" << k << "] -= " << product_oss.str() << endl;
 
@@ -111,31 +111,34 @@ public:
 			} while (std::next_permutation(base_indices.begin(), base_indices.end()));
 		}
 
+		// Flip handedness
+		for (size_t k = 0; k < N; k++)
+			if (k % 2 == 1)
+				result[k] = -result[k];
+
 		cout << endl;
 
 		for (int k = 0; k < N; k++)
 			cout << "result[" << k << "] = " << result[k] << endl;
-		
+
 		cout << endl;
 
-		//if (N == 3)
-		//{
-		//	double x = vectors[0][0];
-		//	double y = vectors[0][1];
-		//	double z = vectors[0][2];
+		if (N == 3)
+		{
+			double x = vectors[0][0];
+			double y = vectors[0][1];
+			double z = vectors[0][2];
 
-		//	double rhs_x = vectors[1][0];
-		//	double rhs_y = vectors[1][1];
-		//	double rhs_z = vectors[1][2];
+			double rhs_x = vectors[1][0];
+			double rhs_y = vectors[1][1];
+			double rhs_z = vectors[1][2];
 
-		//	double cross_x = y * rhs_z - rhs_y * z;
-		//	double cross_y = z * rhs_x - rhs_z * x;
-		//	double cross_z = x * rhs_y - rhs_x * y;
+			double cross_x = y * rhs_z - rhs_y * z;
+			double cross_y = z * rhs_x - rhs_z * x;
+			double cross_z = x * rhs_y - rhs_x * y;
 
-		//	cross_y = -cross_y;
-
-		//	cout << cross_x << " " << cross_y << " " << cross_z << endl << endl;
-		//}
+			cout << cross_x << " " << cross_y << " " << cross_z << endl << endl;
+		}
 
 		return Vector_nD(result);
 	}
@@ -178,10 +181,7 @@ T determinant_nxn(const MatrixXd& m)
 	// Compute the cross product using (N - 1) N-vectors
 	Vector_nD<T, N> result = Vector_nD<T, N>::cross_product(input_vectors);
 
-	// Flip handedness
-	for (size_t i = 0; i < result.components.size(); i++)
-		if (i % 2 == 1)
-			result.components[i] = -result.components[i];
+
 
 	T det = Vector_nD<T, N>::dot_product(a_vector, result);
 
