@@ -20,46 +20,6 @@ class Vector_nD
 public:
 	std::array<T, N> components;
 
-	static void thread_func(const size_t k, double &result, const vector<Vector_nD<T, N>>& vectors)
-	{
-		result = 0;
-
-		// These are the indices we'll use for each component calculation
-		std::array<int, (N - 1)> base_indices;
-
-		for (int i = 0; i < (N - 1); i++)
-			base_indices[i] = i;
-
-		// Skip k in our calculations - this is equivalent to removing the k-th column
-		// For each permutation of the remaining (N - 1) indices
-		do
-		{
-			// Calculate sign of this term
-			const signed char sign = permutation_sign(base_indices);
-
-			// Calculate the product for this permutation
-			T product = 1.0;
-
-			for (int i = 0; i < (N - 1); i++)
-			{
-				const int col = base_indices[i];
-
-				// Adjust column index if it's past k
-				int actual_col = 0;
-
-				if (col < k)
-					actual_col = col;
-				else
-					actual_col = col + 1;
-
-				product *= vectors[i][actual_col];
-			}
-
-			result += sign * product;
-		} 
-		while (std::next_permutation(base_indices.begin(), base_indices.end()));
-	}
-
 	// Helper function to get the sign of permutation
 	static signed char permutation_sign(const std::array<int, (N - 1)>& perm)
 	{
@@ -106,14 +66,52 @@ public:
 
 		vector<thread> threads;
 
-		// For each component of the result vector,
-		// start a new thread
-		for (int i = 0; i < N; i++)
-			threads.push_back(thread(thread_func, i, ref(result[i]), ref(vectors)));
+		size_t max_threads = 1;
 
-		// Wait for threads to finish
-		for (size_t i = 0; i < N; i++)
-			threads[i].join();
+
+		//result = 0;
+
+		// These are the indices we'll use for each component calculation
+		std::array<int, (N - 1)> base_indices;
+
+		for (int i = 0; i < (N - 1); i++)
+			base_indices[i] = i;
+
+		// Skip k in our calculations - this is equivalent to removing the k-th column
+		// For each permutation of the remaining (N - 1) indices
+		for (int k = 0; k < N; k++)
+		{
+			do
+			{
+				// Calculate sign of this term
+				const signed char sign = permutation_sign(base_indices);
+
+				// Calculate the product for this permutation
+				T product = 1.0;
+
+				for (int i = 0; i < (N - 1); i++)
+				{
+					const int col = base_indices[i];
+
+					// Adjust column index if it's past k
+					int actual_col = 0;
+
+					if (col < k)
+						actual_col = col;
+					else
+						actual_col = col + 1;
+
+					//cout << i << " " << actual_col << endl;
+
+					product *= vectors[i][actual_col];
+				}
+
+				//cout << sign << " " << product << endl << endl;
+
+				result[k] += sign * product;
+
+			} while (std::next_permutation(base_indices.begin(), base_indices.end()));
+		}
 
 		return Vector_nD(result);
 	}
