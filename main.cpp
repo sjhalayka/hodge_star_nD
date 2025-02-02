@@ -171,7 +171,7 @@ int main(int argc, char** argv)
 {
 	srand(static_cast<unsigned int>(time(0)));
 
-	const size_t N = 3; // Anything larger than 12 takes eons to solve for
+	const size_t N = 4; // Anything larger than 12 takes eons to solve for
 
 	MatrixX<double> m(N, N);
 
