@@ -118,10 +118,24 @@ public:
 		
 		cout << endl;
 
-		// Flip handedness
-		for (size_t i = 0; i < N; i++)
-			if (i % 2 == 1)
-				result[i] = -result[i];
+		//if (N == 3)
+		//{
+		//	double x = vectors[0][0];
+		//	double y = vectors[0][1];
+		//	double z = vectors[0][2];
+
+		//	double rhs_x = vectors[1][0];
+		//	double rhs_y = vectors[1][1];
+		//	double rhs_z = vectors[1][2];
+
+		//	double cross_x = y * rhs_z - rhs_y * z;
+		//	double cross_y = z * rhs_x - rhs_z * x;
+		//	double cross_z = x * rhs_y - rhs_x * y;
+
+		//	cross_y = -cross_y;
+
+		//	cout << cross_x << " " << cross_y << " " << cross_z << endl << endl;
+		//}
 
 		return Vector_nD(result);
 	}
@@ -163,6 +177,11 @@ T determinant_nxn(const MatrixXd& m)
 
 	// Compute the cross product using (N - 1) N-vectors
 	Vector_nD<T, N> result = Vector_nD<T, N>::cross_product(input_vectors);
+
+	// Flip handedness
+	for (size_t i = 0; i < result.components.size(); i++)
+		if (i % 2 == 1)
+			result.components[i] = -result.components[i];
 
 	T det = Vector_nD<T, N>::dot_product(a_vector, result);
 
