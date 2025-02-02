@@ -102,7 +102,7 @@ public:
 				}
 
 				if(sign == 1)
-					cout << "result[" << k << "] += " << product_oss.str() << endl;
+					cout << "result[" << k << "] += " << product_oss.str() << endl;				
 				else
 					cout << "result[" << k << "] -= " << product_oss.str() << endl;
 
@@ -110,6 +110,13 @@ public:
 
 			} while (std::next_permutation(base_indices.begin(), base_indices.end()));
 		}
+
+		cout << endl;
+
+		for (int k = 0; k < N; k++)
+			cout << "result[" << k << "] = " << result[k] << endl;
+		
+		cout << endl;
 
 		return Vector_nD(result);
 	}
@@ -160,8 +167,8 @@ T determinant_nxn(const MatrixXd& m)
 	T det = Vector_nD<T, N>::dot_product(a_vector, result);
 
 	// These numbers should match
-	cout << det << endl;
-	cout << m.determinant() << endl << endl;
+	cout << "Determinant:       " << det << endl;
+	cout << "Eigen Determinant: " << m.determinant() << endl << endl;
 
 	return det;
 }
@@ -171,7 +178,7 @@ int main(int argc, char** argv)
 {
 	srand(static_cast<unsigned int>(time(0)));
 
-	const size_t N = 4; // Anything larger than 12 takes eons to solve for
+	const size_t N = 3; // Anything larger than 12 takes eons to solve for
 
 	MatrixX<double> m(N, N);
 
