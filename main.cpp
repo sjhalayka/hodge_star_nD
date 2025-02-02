@@ -4,9 +4,7 @@ using namespace Eigen;
 #include <iostream>
 #include <vector>
 #include <numeric>
-#include <mutex>
 #include <string>
-#include <thread>
 #include <sstream>
 #include <algorithm>
 #include <array>
