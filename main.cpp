@@ -107,11 +107,11 @@ public:
 		vector<thread> threads;
 
 		// For each component of the result vector
-		for (int k = 0; k < N; k++)
-			threads.push_back(thread(thread_func, k, ref(result[k]), ref(vectors)));
+		for (int i = 0; i < N; i++)
+			threads.push_back(thread(thread_func, i, ref(result[i]), ref(vectors)));
 
-		for (size_t k = 0; k < N; k++)
-			threads[k].join();
+		for (size_t i = 0; i < N; i++)
+			threads[i].join();
 
 		return Vector_nD(result);
 	}
@@ -151,7 +151,7 @@ T determinant_nxn(const MatrixXd& m)
 		input_vectors.push_back(b_vector);
 	}
 
-	// Compute the cross product using (N - 1) vectors
+	// Compute the cross product using (N - 1) N-vectors
 	Vector_nD<T, N> result = Vector_nD<T, N>::cross_product(input_vectors);
 
 	// Flip handedness
