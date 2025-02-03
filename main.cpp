@@ -125,6 +125,7 @@ public:
 
 		if (N == 3)
 		{
+			// Demonstrate the traditional cross product too
 			double x = vectors[0][0];
 			double y = vectors[0][1];
 			double z = vectors[0][2];
