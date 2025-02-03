@@ -181,8 +181,7 @@ T determinant_nxn(const MatrixXd& m)
 	// Compute the cross product using (N - 1) N-vectors
 	Vector_nD<T, N> result = Vector_nD<T, N>::cross_product(input_vectors);
 
-
-
+	// Compute the dot product
 	T det = Vector_nD<T, N>::dot_product(a_vector, result);
 
 	// These numbers should match
