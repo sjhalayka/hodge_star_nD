@@ -24,6 +24,10 @@ public:
 	// Helper function to get the sign of permutation
 	static signed char permutation_sign(const array<int, (N - 1)>& perm)
 	{
+
+		// + -- ++ -- ++ -- ++ ... etc.
+
+
 		bool sign = true;
 
 		for (int i = 0; i < (N - 2); i++)
@@ -75,10 +79,36 @@ public:
 		// For each permutation of the remaining (N - 1) indices
 		for (int k = 0; k < N; k++)
 		{
+			size_t term_index = 0;
+			size_t prev_base_index = base_indices[0];// .begin();
+
 			do
 			{
+				//if (prev_base_index != base_indices[0])
+				//{
+				//	prev_base_index = base_indices[0];
+				//	term_index = 0;
+				//}
+
 				// Calculate sign of this term
-				const signed char sign = permutation_sign(base_indices);
+				signed char sign =  permutation_sign(base_indices);
+
+				//if (term_index == 0)
+				//{
+				//	sign = 1;
+				//}
+				//else
+				//{
+				//	size_t local_term_index = term_index - 1;
+				//	local_term_index /= 2;
+
+				//	if (local_term_index % 2 != 0)
+				//		sign = 1;
+				//	else
+				//		sign = -1;				
+				//}
+
+				term_index++;
 
 				// Calculate the product for this permutation
 				T product = 1.0;
@@ -96,19 +126,21 @@ public:
 					else
 						actual_col = col + 1;
 
-					product_oss << "v(" << i << ", " << actual_col << ") ";
+					product_oss << "v_{" << i << actual_col << "} ";
 
 					product *= vectors[i][actual_col];
 				}
 
 				if (sign == 1)
-					cout << "result[" << k << "] += " << product_oss.str() << endl;
+					cout << "x_{" << k << "} += " << product_oss.str() << endl;
 				else
-					cout << "result[" << k << "] -= " << product_oss.str() << endl;
+					cout << "x_{" << k << "} -= " << product_oss.str() << endl;
 
 				result[k] += sign * product;
 
-			} while (next_permutation(base_indices.begin(), base_indices.end()));
+			} while(next_permutation(
+					base_indices.begin(), 
+					base_indices.end()));
 		}
 
 		// Flip handedness
@@ -146,13 +178,16 @@ public:
 
 	static T dot_product(const Vector_nD<T, N>& a, const Vector_nD<T, N>& b)
 	{
-		return inner_product(a.components.begin(), a.components.end(), b.components.begin(), 0.0);
+		return inner_product(
+			a.components.begin(), 
+			a.components.end(), 
+			b.components.begin(), 0.0);
 	}
 };
 
 
 template <class T, typename size_t N>
-T determinant_nxn(const MatrixXd& m)
+T determinant_nxn(const MatrixX<T>& m)
 {
 	if (m.cols() != m.rows())
 	{
@@ -197,7 +232,7 @@ int main(int argc, char** argv)
 {
 	srand(static_cast<unsigned int>(time(0)));
 
-	const size_t N = 3; // Anything larger than 12 takes eons to solve for
+	const size_t N = 11; // Anything larger than 12 takes eons to solve for
 
 	MatrixX<double> m(N, N);
 
