@@ -24,10 +24,6 @@ public:
 	// Helper function to get the sign of permutation
 	static signed char permutation_sign(const array<int, (N - 1)>& perm)
 	{
-
-		// + -- ++ -- ++ -- ++ ... etc.
-
-
 		bool sign = true;
 
 		for (int i = 0; i < (N - 2); i++)
@@ -232,7 +228,7 @@ int main(int argc, char** argv)
 {
 	srand(static_cast<unsigned int>(time(0)));
 
-	const size_t N = 11; // Anything larger than 12 takes eons to solve for
+	const size_t N = 6; // Anything larger than 12 takes eons to solve for
 
 	MatrixX<double> m(N, N);
 
