@@ -8,6 +8,9 @@ using namespace Eigen;
 #include <sstream>
 #include <algorithm>
 #include <array>
+#include <chrono>
+#include <set>
+
 using namespace std;
 
 
@@ -21,15 +24,38 @@ class Vector_nD
 public:
 	array<T, N> components;
 
-	// Helper function to get the sign of permutation
-	static signed char permutation_sign(const array<int, (N - 1)>& perm)
+	T operator[](size_t index) const
+	{
+		return components[index];
+	}
+
+	Vector_nD<T, N>(const array<T, N>& comps) : components(comps)
+	{
+
+	}
+
+	Vector_nD<T, N>(void)
+	{
+		components.fill(0.0);
+	}
+
+	// Levi-Civita symbol, where i != j, 
+	// and so it returns either 1 or -1
+	static signed char permutation_sign(const array<int, (N - 1)> perm)
 	{
 		bool sign = true;
 
-		for (int i = 0; i < (N - 2); i++)
-			for (int j = i + 1; j < (N - 1); j++)
+		for (size_t i = 0; i < (N - 2); i++)
+		{
+			for (size_t j = i + 1; j < (N - 1); j++)
+			{
 				if (perm[i] > perm[j])
+				{
+					// a swap would be needed here if sorting
 					sign = !sign;
+				}
+			}
+		}
 
 		if (sign)
 			return 1;
@@ -37,26 +63,12 @@ public:
 			return -1;
 	}
 
-	Vector_nD(const array<T, N>& comps) : components(comps)
-	{
-	}
-
-	Vector_nD(void)
-	{
-		components.fill(0.0);
-	}
-
-	T operator[](size_t index) const
-	{
-		return components[index];
-	}
-
 	// Hodge star operator, where k = n - 1
-	static Vector_nD cross_product(const vector<Vector_nD<T, N>>& vectors)
+	static Vector_nD star(const vector<Vector_nD<T, N>>& vectors)
 	{
 		if (vectors.size() != (N - 1))
 		{
-			cout << "nD cross product requires exactly (n - 1) input vectors" << endl;
+			cout << "nD operation requires (n - 1) input vectors" << endl;
 			return Vector_nD<T, N>();
 		}
 
@@ -71,40 +83,39 @@ public:
 		for (int i = 0; i < (N - 1); i++)
 			base_indices[i] = i;
 
+		// Fill cache
+		set< array<int, (N - 1)>> cache_set_positive;
+
+		do
+		{
+			signed char sign = Vector_nD<T, N>::permutation_sign(base_indices);
+			
+			if (sign == 1)
+				cache_set_positive.insert(base_indices);
+
+		} while (next_permutation(
+			base_indices.begin(),
+			base_indices.end()));
+
+
 		// Skip k in our calculations - this is equivalent to removing the k-th column
 		// For each permutation of the remaining (N - 1) indices
 		for (int k = 0; k < N; k++)
 		{
-			size_t term_index = 0;
-			size_t prev_base_index = base_indices[0];// .begin();
-
 			do
 			{
-				//if (prev_base_index != base_indices[0])
-				//{
-				//	prev_base_index = base_indices[0];
-				//	term_index = 0;
-				//}
+				// Do not use cache
+				//signed char sign = Vector_nD<T, N>::permutation_sign(base_indices);
 
-				// Calculate sign of this term
-				signed char sign =  permutation_sign(base_indices);
+				// Use cache
+				signed char sign = 0;
 
-				//if (term_index == 0)
-				//{
-				//	sign = 1;
-				//}
-				//else
-				//{
-				//	size_t local_term_index = term_index - 1;
-				//	local_term_index /= 2;
+				auto ci = cache_set_positive.find(base_indices);
 
-				//	if (local_term_index % 2 != 0)
-				//		sign = 1;
-				//	else
-				//		sign = -1;				
-				//}
-
-				term_index++;
+				if (ci != cache_set_positive.end())
+					sign = 1;
+				else
+					sign = -1;
 
 				// Calculate the product for this permutation
 				T product = 1.0;
@@ -127,10 +138,10 @@ public:
 					product *= vectors[i][actual_col];
 				}
 
-				if (sign == 1)
-					cout << "x_{" << k << "} += " << product_oss.str() << endl;
-				else
-					cout << "x_{" << k << "} -= " << product_oss.str() << endl;
+				//if (sign == 1)
+				//	cout << "x_{" << k << "} += " << product_oss.str() << endl;
+				//else
+				//	cout << "x_{" << k << "} -= " << product_oss.str() << endl;
 
 				result[k] += sign * product;
 
@@ -197,7 +208,7 @@ T determinant_nxn(const MatrixX<T>& m)
 	for (size_t i = 0; i < N; i++)
 		a_vector.components[i] = m(0, i);
 
-	// We will use these (N - 1) N-vectors later, in the cross product operation
+	// We will use these (N - 1) N-vectors later, in the Hodge star operation
 	vector<Vector_nD<T, N>> input_vectors;
 
 	for (size_t i = 1; i < N; i++)
@@ -210,8 +221,8 @@ T determinant_nxn(const MatrixX<T>& m)
 		input_vectors.push_back(b_vector);
 	}
 
-	// Compute the cross product using (N - 1) N-vectors
-	Vector_nD<T, N> result = Vector_nD<T, N>::cross_product(input_vectors);
+	// Compute the Hodge star operation using (N - 1) N-vectors
+	Vector_nD<T, N> result = Vector_nD<T, N>::star(input_vectors);
 
 	// Compute the dot product
 	T det = Vector_nD<T, N>::dot_product(a_vector, result);
@@ -223,12 +234,11 @@ T determinant_nxn(const MatrixX<T>& m)
 	return det;
 }
 
-
 int main(int argc, char** argv)
 {
 	srand(static_cast<unsigned int>(time(0)));
 
-	const size_t N = 6; // Anything larger than 12 takes eons to solve for
+	const size_t N = 8; // Anything larger than 12 takes eons to solve for
 
 	MatrixX<double> m(N, N);
 
@@ -243,7 +253,15 @@ int main(int argc, char** argv)
 		}
 	}
 
+	std::chrono::high_resolution_clock::time_point start_time, end_time;
+	start_time = std::chrono::high_resolution_clock::now();
+
 	determinant_nxn<double, N>(m);
+
+	end_time = std::chrono::high_resolution_clock::now();
+	std::chrono::duration<float, std::milli> elapsed = end_time - start_time;
+
+	cout << "Duration: " << elapsed.count() / 1000.0f << " seconds";
 
 	return 0;
 }
