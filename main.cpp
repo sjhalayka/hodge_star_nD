@@ -39,7 +39,7 @@ public:
 
 	// Compute the Levi-Civita symbol using a pattern
 	// Note: this only works for N <= 5
-	static signed char permutation_sign_pattern(const size_t term_index)
+	static signed char permutation_sign_pattern(const size_t term_index, const bool parity)
 	{
 		signed char sign = 0;
 
@@ -58,8 +58,10 @@ public:
 				sign = -1;
 		}
 
-		return sign;
+		if (false == parity)
+			sign = -sign;
 
+		return sign;
 	}
 
 	// Compute the Levi-Civita symbol using the determinant method
@@ -128,6 +130,9 @@ public:
 			size_t term_index = 0;
 			bool parity = true;
 
+			size_t prev_i = 0;
+			size_t prev_actual_col = 0;
+
 			do
 			{
 				// Calculate manually
@@ -135,15 +140,15 @@ public:
 				//signed char sign_det = Vector_nD<T, N>::permutation_sign_det(base_indices);
 
 				// Use pattern, works for n <= 5
-				signed char sign = permutation_sign_pattern(term_index);
+				signed char sign = permutation_sign_pattern(term_index, parity);
 
 				if (sign != sign_perm)
 				{
 					parity = !parity;
-					cout << "mismatch " << (int)sign << " " << (int)sign_perm << endl;
+					sign = -sign;
+					term_index = 0;
 				}
 
-				term_index++;
 
 				// Calculate the product for this permutation
 				T product = 1.0;
@@ -164,28 +169,26 @@ public:
 					product_oss << "v_{" << i << actual_col << "} ";
 
 					product *= vectors[i][actual_col];
+
+					//if (prev_i != i || prev_actual_col != actual_col)
+					//{
+					//	parity = !parity;
+					//	sign = -sign;
+					//	term_index = 0;
+					//	prev_actual_col = actual_col;
+					//	prev_i = i;
+					//}
+
 				}
 
-				
-
-				//if (true == parity)
-				//{
-				//	sign = sign_perm;// -sign;
-				//	//parity = true;
-				//}
-				//else
-				//{
-				//	sign = -sign_perm;
-				//}
+				term_index++;
 
 				result[k] += sign * product;
 
-				if (sign == 1)
-					cout << "x_{" << k << "} += " << product_oss.str() << endl;
-				else
-					cout << "x_{" << k << "} -= " << product_oss.str() << endl;
-
-				
+				//if (sign == 1)
+				//	cout << "x_{" << k << "} += " << product_oss.str() << endl;
+				//else
+				//	cout << "x_{" << k << "} -= " << product_oss.str() << endl;
 
 			} while(next_permutation(
 					base_indices.begin(), 
@@ -281,7 +284,7 @@ int main(int argc, char** argv)
 {
 	srand(static_cast<unsigned int>(time(0)));
 
-	const size_t N = 6; // Anything larger than 5 doesn't follow the pattern
+	const size_t N = 8; // Anything larger than 5 doesn't follow the pattern
 
 	// The sign parity changes whenever the column index (N - 6) changes value
 	// This only holds where n >= 6
