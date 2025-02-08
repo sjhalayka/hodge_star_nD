@@ -9,8 +9,6 @@ using namespace Eigen;
 #include <algorithm>
 #include <array>
 #include <chrono>
-#include <set>
-
 using namespace std;
 
 
@@ -37,6 +35,46 @@ public:
 	Vector_nD<T, N>(void)
 	{
 		components.fill(0.0);
+	}
+
+	// Compute the Levi-Civita symbol using a pattern
+	// Note: this only works for N <= 5
+	static signed char permutation_sign_pattern(const size_t term_index)
+	{
+		signed char sign = 0;
+
+		if (term_index == 0)
+		{
+			sign = 1;
+		}
+		else
+		{
+			size_t local_term_index = term_index - 1;
+			local_term_index /= 2;
+
+			if (local_term_index % 2 != 0)
+				sign = 1;
+			else
+				sign = -1;
+		}
+
+		return sign;
+
+	}
+
+	// Compute the Levi-Civita symbol using the determinant method
+	static signed char permutation_sign_det(const array<int, (N - 1) >& indices)
+	{
+		size_t n = indices.size();
+
+		MatrixX<double> m(n, n);
+		m = MatrixX<double>::Zero(n, n);
+
+		for (int i = 0; i < n; i++) 
+			m(i, indices[i]) = 1;
+
+		// Compute the determinant of the Kronecker delta matrix
+		return static_cast<signed char>(m.determinant());
 	}
 
 	// Levi-Civita symbol, where i != j, 
@@ -83,39 +121,22 @@ public:
 		for (int i = 0; i < (N - 1); i++)
 			base_indices[i] = i;
 
-		// Fill cache
-		set< array<int, (N - 1)>> cache_set_positive;
-
-		do
-		{
-			signed char sign = Vector_nD<T, N>::permutation_sign(base_indices);
-			
-			if (sign == 1)
-				cache_set_positive.insert(base_indices);
-
-		} while (next_permutation(
-			base_indices.begin(),
-			base_indices.end()));
-
-
 		// Skip k in our calculations - this is equivalent to removing the k-th column
 		// For each permutation of the remaining (N - 1) indices
 		for (int k = 0; k < N; k++)
 		{
+			size_t term_index = 0;
+
 			do
 			{
-				// Do not use cache
+				// Calculate manually
 				//signed char sign = Vector_nD<T, N>::permutation_sign(base_indices);
+				//signed char sign = Vector_nD<T, N>::permutation_sign_det(base_indices);
 
-				// Use cache
-				signed char sign = 0;
+				// Use pattern, works for n <= 5
+				signed char sign = permutation_sign_pattern(term_index);
 
-				auto ci = cache_set_positive.find(base_indices);
-
-				if (ci != cache_set_positive.end())
-					sign = 1;
-				else
-					sign = -1;
+				term_index++;
 
 				// Calculate the product for this permutation
 				T product = 1.0;
@@ -234,11 +255,12 @@ T determinant_nxn(const MatrixX<T>& m)
 	return det;
 }
 
+
 int main(int argc, char** argv)
 {
 	srand(static_cast<unsigned int>(time(0)));
 
-	const size_t N = 8; // Anything larger than 12 takes eons to solve for
+	const size_t N = 5; // Anything larger than 5 doesn't follow the pattern
 
 	MatrixX<double> m(N, N);
 
