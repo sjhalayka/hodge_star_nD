@@ -168,15 +168,15 @@ public:
 
 				
 
-				if (true == parity)
-				{
-					sign = sign_perm;// -sign;
-					//parity = true;
-				}
-				else
-				{
-					sign = -sign_perm;
-				}
+				//if (true == parity)
+				//{
+				//	sign = sign_perm;// -sign;
+				//	//parity = true;
+				//}
+				//else
+				//{
+				//	sign = -sign_perm;
+				//}
 
 				result[k] += sign * product;
 
@@ -281,7 +281,7 @@ int main(int argc, char** argv)
 {
 	srand(static_cast<unsigned int>(time(0)));
 
-	const size_t N = 5; // Anything larger than 5 doesn't follow the pattern
+	const size_t N = 6; // Anything larger than 5 doesn't follow the pattern
 
 	// The sign parity changes whenever the column index (N - 6) changes value
 	// This only holds where n >= 6
