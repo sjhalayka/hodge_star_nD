@@ -126,15 +126,22 @@ public:
 		for (int k = 0; k < N; k++)
 		{
 			size_t term_index = 0;
+			bool parity = true;
 
 			do
 			{
 				// Calculate manually
-				//signed char sign = Vector_nD<T, N>::permutation_sign(base_indices);
-				//signed char sign = Vector_nD<T, N>::permutation_sign_det(base_indices);
+				signed char sign_perm = Vector_nD<T, N>::permutation_sign(base_indices);
+				//signed char sign_det = Vector_nD<T, N>::permutation_sign_det(base_indices);
 
 				// Use pattern, works for n <= 5
 				signed char sign = permutation_sign_pattern(term_index);
+
+				if (sign != sign_perm)
+				{
+					parity = !parity;
+					cout << "mismatch " << (int)sign << " " << (int)sign_perm << endl;
+				}
 
 				term_index++;
 
@@ -159,12 +166,26 @@ public:
 					product *= vectors[i][actual_col];
 				}
 
-				//if (sign == 1)
-				//	cout << "x_{" << k << "} += " << product_oss.str() << endl;
-				//else
-				//	cout << "x_{" << k << "} -= " << product_oss.str() << endl;
+				
+
+				if (true == parity)
+				{
+					sign = sign_perm;// -sign;
+					//parity = true;
+				}
+				else
+				{
+					sign = -sign_perm;
+				}
 
 				result[k] += sign * product;
+
+				if (sign == 1)
+					cout << "x_{" << k << "} += " << product_oss.str() << endl;
+				else
+					cout << "x_{" << k << "} -= " << product_oss.str() << endl;
+
+				
 
 			} while(next_permutation(
 					base_indices.begin(), 
@@ -261,6 +282,9 @@ int main(int argc, char** argv)
 	srand(static_cast<unsigned int>(time(0)));
 
 	const size_t N = 5; // Anything larger than 5 doesn't follow the pattern
+
+	// The sign parity changes whenever the column index (N - 6) changes value
+	// This only holds where n >= 6
 
 	MatrixX<double> m(N, N);
 
