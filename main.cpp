@@ -132,16 +132,9 @@ public:
 
 			do
 			{
-				// Use pattern, works for n <= 5
+				// Use pattern
 				signed char sign = permutation_sign_pattern(term_index, parity);
 
-				//if (sign != sign_perm)
-				//{
-				//	parity = !parity;
-				//	sign = -sign;
-				//	term_index = 0;
-				//}
-	
 				// Calculate the product for this permutation
 				T product = 1.0;
 				ostringstream product_oss;
