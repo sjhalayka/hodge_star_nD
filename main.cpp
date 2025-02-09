@@ -141,8 +141,12 @@ public:
 			size_t swap_count = 0;
 			size_t no_swap_count = 0;
 
+			vector<string> prev_tokens;
+
 			do
 			{
+				vector<string> tokens;
+
 				// Use pattern
 				signed char sign = permutation_sign_pattern(term_index, parity);
 
@@ -150,7 +154,8 @@ public:
 				T product = 1.0;
 				ostringstream product_oss;
 
-				//vector<string> 
+
+
 
 				for (int i = 0; i < (N - 1); i++)
 				{
@@ -164,40 +169,37 @@ public:
 					else
 						actual_col = col + 1;
 
+					tokens.push_back("v_{" + to_string(i) + to_string(actual_col) + "} ");
+
 					product_oss << "v_{" << i << actual_col << "} ";
 
 					product *= vectors[i][actual_col];
 
 					if (N >= 6 && i == N - 6)
 					{
-						string str = product_oss.str();
+						string str = to_string(i) + to_string(actual_col);// product_oss.str();
 
 						if(prev_string != str)
 						{
-							// Calculate manually
-							const signed char sign_perm = Vector_nD<T, N>::permutation_sign(base_indices);
+							bool found_different = false;
 
-							cout << (int)sign << " " << (int)sign_perm << endl;
-							cout << prev_string << "     " << str << endl;
+							size_t num_found_different = 0;
 
-							if (sign != sign_perm)
+							for (size_t j = 0; j < prev_tokens.size(); j++)
 							{
-								swap_count++;
-								cout << "swapping parity" << endl;
-								
+								if (tokens[j] != prev_tokens[j])
+									num_found_different++;
+							}
+
+							if (num_found_different != tokens.size())
+							{
 								parity = !parity;
 								sign = -sign;
 								term_index = 0;
 							}
-							else
-							{
-								no_swap_count++;
-								cout << "not swapping parity" << endl;
-								//exit(0);
-							}
-							
-							prev_string = str;
 
+							prev_string = str;
+							prev_tokens = tokens;
 						}
 					}
 				}
