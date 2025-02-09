@@ -277,7 +277,7 @@ int main(int argc, char** argv)
 {
 	srand(static_cast<unsigned int>(time(0)));
 
-	const size_t N = 8;
+	const size_t N = 10;
 
 	MatrixX<double> m(N, N);
 
