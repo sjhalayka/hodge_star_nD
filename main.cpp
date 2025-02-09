@@ -128,7 +128,7 @@ public:
 		{
 			size_t term_index = 0;
 			bool parity = true;
-			size_t prev_coeff_index = 0;
+			long signed int prev_coeff_index = -1;
 
 			do
 			{
@@ -157,7 +157,7 @@ public:
 
 					if (N >= 6 && i == N - 6)
 					{
-						if (prev_coeff_index != actual_col)
+						if (prev_coeff_index == -1 || prev_coeff_index != actual_col)
 						{
 							// Calculate manually
 							const signed char sign_perm = Vector_nD<T, N>::permutation_sign(base_indices);
@@ -277,7 +277,7 @@ int main(int argc, char** argv)
 {
 	srand(static_cast<unsigned int>(time(0)));
 
-	const size_t N = 10;
+	const size_t N = 9;
 
 	MatrixX<double> m(N, N);
 
