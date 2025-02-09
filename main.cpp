@@ -38,7 +38,6 @@ public:
 	}
 
 	// Compute the Levi-Civita symbol using a pattern
-	// Note: this only works for N <= 5
 	static signed char permutation_sign_pattern(const size_t term_index, const bool parity)
 	{
 		signed char sign = 0;
