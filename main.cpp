@@ -130,8 +130,7 @@ public:
 			size_t term_index = 0;
 			bool parity = true;
 
-			size_t prev_i = 0;
-			size_t prev_actual_col = 0;
+			string prev_term_string = "";
 
 			do
 			{
@@ -144,11 +143,11 @@ public:
 
 				if (sign != sign_perm)
 				{
+					cout << "swap parity" << endl;
 					parity = !parity;
 					sign = -sign;
 					term_index = 0;
 				}
-
 
 				// Calculate the product for this permutation
 				T product = 1.0;
@@ -170,25 +169,34 @@ public:
 
 					product *= vectors[i][actual_col];
 
-					//if (prev_i != i || prev_actual_col != actual_col)
+					//if (N >= 6 && i == N - 6)
 					//{
-					//	parity = !parity;
-					//	sign = -sign;
-					//	term_index = 0;
-					//	prev_actual_col = actual_col;
-					//	prev_i = i;
-					//}
+					//	ostringstream current_oss;
+					//	current_oss << i << actual_col;
+					//	const string str = current_oss.str();
 
+					//	if (prev_term_string != str)
+					//	{
+					//		if (prev_term_string != "")
+					//		{
+					//			parity = !parity;
+					//			sign = -sign;
+					//			term_index = 0;
+					//		}
+					//		
+					//		prev_term_string = str;
+					//	}
+					//}
 				}
 
 				term_index++;
 
 				result[k] += sign * product;
 
-				//if (sign == 1)
-				//	cout << "x_{" << k << "} += " << product_oss.str() << endl;
-				//else
-				//	cout << "x_{" << k << "} -= " << product_oss.str() << endl;
+				if (sign == 1)
+					cout << "x_{" << k << "} += " << product_oss.str() << endl;
+				else
+					cout << "x_{" << k << "} -= " << product_oss.str() << endl;
 
 			} while(next_permutation(
 					base_indices.begin(), 
