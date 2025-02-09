@@ -122,13 +122,24 @@ public:
 		for (int i = 0; i < (N - 1); i++)
 			base_indices[i] = i;
 
+
+
 		// Skip k in our calculations - this is equivalent to removing the k-th column
 		// For each permutation of the remaining (N - 1) indices
 		for (int k = 0; k < N; k++)
 		{
 			size_t term_index = 0;
-			bool parity = true;
-			long signed int prev_coeff_index = -1;
+			bool parity = false;
+
+			if (N <= 6)
+				parity = true;
+
+			//long signed int prev_coeff_index = -1;
+
+			string prev_string = "";
+
+			size_t swap_count = 0;
+			size_t no_swap_count = 0;
 
 			do
 			{
@@ -138,6 +149,8 @@ public:
 				// Calculate the product for this permutation
 				T product = 1.0;
 				ostringstream product_oss;
+
+				//vector<string> 
 
 				for (int i = 0; i < (N - 1); i++)
 				{
@@ -157,19 +170,34 @@ public:
 
 					if (N >= 6 && i == N - 6)
 					{
-						if (prev_coeff_index == -1 || prev_coeff_index != actual_col)
+						string str = product_oss.str();
+
+						if(prev_string != str)
 						{
 							// Calculate manually
 							const signed char sign_perm = Vector_nD<T, N>::permutation_sign(base_indices);
 
+							cout << (int)sign << " " << (int)sign_perm << endl;
+							cout << prev_string << "     " << str << endl;
+
 							if (sign != sign_perm)
 							{
+								swap_count++;
+								cout << "swapping parity" << endl;
+								
 								parity = !parity;
 								sign = -sign;
 								term_index = 0;
 							}
+							else
+							{
+								no_swap_count++;
+								cout << "not swapping parity" << endl;
+								//exit(0);
+							}
 							
-							prev_coeff_index = actual_col;
+							prev_string = str;
+
 						}
 					}
 				}
@@ -178,14 +206,18 @@ public:
 
 				result[k] += sign * product;
 
-				//if (sign == 1)
-				//	cout << "x_{" << k << "} += " << product_oss.str() << endl;
-				//else
-				//	cout << "x_{" << k << "} -= " << product_oss.str() << endl;
+				if (sign == 1)
+					cout << "x_{" << k << "} += " << product_oss.str() << endl;
+				else
+					cout << "x_{" << k << "} -= " << product_oss.str() << endl;
 
 			} while(next_permutation(
 					base_indices.begin(), 
 					base_indices.end()));
+
+			cout << swap_count << endl;
+			cout << no_swap_count << endl;
+			cout << swap_count + no_swap_count << endl;
 		}
 
 		// Flip handedness
@@ -277,7 +309,7 @@ int main(int argc, char** argv)
 {
 	srand(static_cast<unsigned int>(time(0)));
 
-	const size_t N = 9;
+	const size_t N = 8;
 
 	MatrixX<double> m(N, N);
 
