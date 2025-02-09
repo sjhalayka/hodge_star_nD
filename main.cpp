@@ -129,24 +129,19 @@ public:
 		{
 			size_t term_index = 0;
 			bool parity = true;
-
-			string prev_term_string = "";
+			size_t prev_coeff_index = 0;
 
 			do
 			{
-				// Calculate manually
-				signed char sign_perm = Vector_nD<T, N>::permutation_sign(base_indices);
-				//signed char sign_det = Vector_nD<T, N>::permutation_sign_det(base_indices);
-
 				// Use pattern, works for n <= 5
 				signed char sign = permutation_sign_pattern(term_index, parity);
 
-				if (sign != sign_perm)
-				{
-					parity = !parity;
-					sign = -sign;
-					term_index = 0;
-				}
+				//if (sign != sign_perm)
+				//{
+				//	parity = !parity;
+				//	sign = -sign;
+				//	term_index = 0;
+				//}
 	
 				// Calculate the product for this permutation
 				T product = 1.0;
@@ -170,26 +165,20 @@ public:
 
 					if (N >= 6 && i == N - 6)
 					{
-						string str = to_string(i) + to_string(actual_col);
-						
-						////if (N >= 7)
-						////	str = "v_{" + to_string(i) + to_string(actual_col) + "} ";// first_coeff_cut_out.str();
-						////else
-						////	str = product_oss.str();
+						if (prev_coeff_index != actual_col)
+						{
+							// Calculate manually
+							const signed char sign_perm = Vector_nD<T, N>::permutation_sign(base_indices);
 
-						//if (prev_term_string != str)
-						//{
-						//	if (prev_term_string != "")
-						//	{
-						//		cout << prev_term_string << endl << str << endl << endl;
-
-						//		parity = !parity;
-						//		sign = -sign;
-						//		term_index = 0;
-						//	}
-						//	
-						//	prev_term_string = str;
-						//}
+							if (sign != sign_perm)
+							{
+								parity = !parity;
+								sign = -sign;
+								term_index = 0;
+							}
+							
+							prev_coeff_index = actual_col;
+						}
 					}
 				}
 
@@ -197,10 +186,10 @@ public:
 
 				result[k] += sign * product;
 
-				if (sign == 1)
-					cout << "x_{" << k << "} += " << product_oss.str() << endl;
-				else
-					cout << "x_{" << k << "} -= " << product_oss.str() << endl;
+				//if (sign == 1)
+				//	cout << "x_{" << k << "} += " << product_oss.str() << endl;
+				//else
+				//	cout << "x_{" << k << "} -= " << product_oss.str() << endl;
 
 			} while(next_permutation(
 					base_indices.begin(), 
@@ -296,10 +285,7 @@ int main(int argc, char** argv)
 {
 	srand(static_cast<unsigned int>(time(0)));
 
-	const size_t N = 8; // Anything larger than 5 doesn't follow the pattern
-
-	// The sign parity changes whenever the column index (N - 6) changes value
-	// This only holds where n >= 6
+	const size_t N = 8;
 
 	MatrixX<double> m(N, N);
 
