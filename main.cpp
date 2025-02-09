@@ -143,12 +143,11 @@ public:
 
 				if (sign != sign_perm)
 				{
-					cout << "swap parity" << endl;
 					parity = !parity;
 					sign = -sign;
 					term_index = 0;
 				}
-
+	
 				// Calculate the product for this permutation
 				T product = 1.0;
 				ostringstream product_oss;
@@ -169,24 +168,29 @@ public:
 
 					product *= vectors[i][actual_col];
 
-					//if (N >= 6 && i == N - 6)
-					//{
-					//	ostringstream current_oss;
-					//	current_oss << i << actual_col;
-					//	const string str = current_oss.str();
+					if (N >= 6 && i == N - 6)
+					{
+						string str = to_string(i) + to_string(actual_col);
+						
+						////if (N >= 7)
+						////	str = "v_{" + to_string(i) + to_string(actual_col) + "} ";// first_coeff_cut_out.str();
+						////else
+						////	str = product_oss.str();
 
-					//	if (prev_term_string != str)
-					//	{
-					//		if (prev_term_string != "")
-					//		{
-					//			parity = !parity;
-					//			sign = -sign;
-					//			term_index = 0;
-					//		}
-					//		
-					//		prev_term_string = str;
-					//	}
-					//}
+						//if (prev_term_string != str)
+						//{
+						//	if (prev_term_string != "")
+						//	{
+						//		cout << prev_term_string << endl << str << endl << endl;
+
+						//		parity = !parity;
+						//		sign = -sign;
+						//		term_index = 0;
+						//	}
+						//	
+						//	prev_term_string = str;
+						//}
+					}
 				}
 
 				term_index++;
