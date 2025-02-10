@@ -131,7 +131,7 @@ public:
 			size_t term_index = 0;
 			bool parity = false;
 
-			if (N <= 6)
+			if (N < 6)
 				parity = true;
 
 			//long signed int prev_coeff_index = -1;
@@ -224,10 +224,10 @@ public:
 
 				result[k] += sign * product;
 
-				if (sign == 1)
-					cout << "x_{" << k << "} += " << product_oss.str() << endl;
-				else
-					cout << "x_{" << k << "} -= " << product_oss.str() << endl;
+				//if (sign == 1)
+				//	cout << "x_{" << k << "} += " << product_oss.str() << endl;
+				//else
+				//	cout << "x_{" << k << "} -= " << product_oss.str() << endl;
 
 			} while (next_permutation(
 				base_indices.begin(),
