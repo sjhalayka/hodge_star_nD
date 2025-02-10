@@ -141,6 +141,8 @@ public:
 			size_t swap_count = 0;
 			size_t no_swap_count = 0;
 
+
+
 			do
 			{
 				// Use pattern
@@ -149,8 +151,6 @@ public:
 				// Calculate the product for this permutation
 				T product = 1.0;
 				ostringstream product_oss;
-
-				//vector<string> 
 
 				for (int i = 0; i < (N - 1); i++)
 				{
@@ -170,7 +170,7 @@ public:
 
 					if (N >= 6 && i == N - 6)
 					{
-						string str = product_oss.str();
+						string str = to_string(actual_col);// product_oss.str();
 
 						if (prev_string != str)
 						{
@@ -309,7 +309,7 @@ int main(int argc, char** argv)
 {
 	srand(static_cast<unsigned int>(time(0)));
 
-	const size_t N = 8;
+	const size_t N = 6;
 
 	MatrixX<double> m(N, N);
 
