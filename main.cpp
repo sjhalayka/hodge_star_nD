@@ -71,7 +71,7 @@ public:
 		MatrixX<double> m(n, n);
 		m = MatrixX<double>::Zero(n, n);
 
-		for (int i = 0; i < n; i++) 
+		for (int i = 0; i < n; i++)
 			m(i, indices[i]) = 1;
 
 		// Compute the determinant of the Kronecker delta matrix
@@ -141,12 +141,8 @@ public:
 			size_t swap_count = 0;
 			size_t no_swap_count = 0;
 
-			vector<string> prev_tokens;
-
 			do
 			{
-				vector<string> tokens;
-
 				// Use pattern
 				signed char sign = permutation_sign_pattern(term_index, parity);
 
@@ -154,8 +150,7 @@ public:
 				T product = 1.0;
 				ostringstream product_oss;
 
-
-
+				//vector<string> 
 
 				for (int i = 0; i < (N - 1); i++)
 				{
@@ -169,37 +164,40 @@ public:
 					else
 						actual_col = col + 1;
 
-					tokens.push_back("v_{" + to_string(i) + to_string(actual_col) + "} ");
-
 					product_oss << "v_{" << i << actual_col << "} ";
 
 					product *= vectors[i][actual_col];
 
 					if (N >= 6 && i == N - 6)
 					{
-						string str = to_string(i) + to_string(actual_col);// product_oss.str();
+						string str = product_oss.str();
 
-						if(prev_string != str)
+						if (prev_string != str)
 						{
-							bool found_different = false;
+							// Calculate manually
+							const signed char sign_perm = Vector_nD<T, N>::permutation_sign(base_indices);
 
-							size_t num_found_different = 0;
+							cout << (int)sign << " " << (int)sign_perm << endl;
+							cout << prev_string << "     " << str << endl;
 
-							for (size_t j = 0; j < prev_tokens.size(); j++)
+							if (sign != sign_perm)
 							{
-								if (tokens[j] != prev_tokens[j])
-									num_found_different++;
-							}
+								swap_count++;
+								cout << "swapping parity" << endl;
 
-							if (num_found_different != tokens.size())
-							{
 								parity = !parity;
 								sign = -sign;
 								term_index = 0;
 							}
+							else
+							{
+								no_swap_count++;
+								cout << "not swapping parity" << endl;
+								//exit(0);
+							}
 
 							prev_string = str;
-							prev_tokens = tokens;
+
 						}
 					}
 				}
@@ -213,9 +211,9 @@ public:
 				else
 					cout << "x_{" << k << "} -= " << product_oss.str() << endl;
 
-			} while(next_permutation(
-					base_indices.begin(), 
-					base_indices.end()));
+			} while (next_permutation(
+				base_indices.begin(),
+				base_indices.end()));
 
 			cout << swap_count << endl;
 			cout << no_swap_count << endl;
@@ -258,8 +256,8 @@ public:
 	static T dot_product(const Vector_nD<T, N>& a, const Vector_nD<T, N>& b)
 	{
 		return inner_product(
-			a.components.begin(), 
-			a.components.end(), 
+			a.components.begin(),
+			a.components.end(),
 			b.components.begin(), 0.0);
 	}
 };
