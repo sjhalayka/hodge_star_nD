@@ -195,7 +195,7 @@ public:
 									different_count++;
 							}
 
-							if (different_count <= 1)// prev_tokens.size())
+							if (different_count < N - 6)// prev_tokens.size())
 								//if (sign != sign_perm)
 							{
 								swap_count++;
@@ -327,7 +327,7 @@ int main(int argc, char** argv)
 {
 	srand(static_cast<unsigned int>(time(0)));
 
-	const size_t N = 9;
+	const size_t N = 8;
 
 	MatrixX<double> m(N, N);
 
