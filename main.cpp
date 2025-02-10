@@ -129,7 +129,7 @@ public:
 		for (int k = 0; k < N; k++)
 		{
 			size_t term_index = 0;
-			bool parity = false;
+			bool parity = true;
 
 			if (N <= 6)
 				parity = true;
@@ -141,7 +141,7 @@ public:
 			size_t swap_count = 0;
 			size_t no_swap_count = 0;
 
-
+			vector<string> prev_tokens;
 
 			do
 			{
@@ -151,6 +151,8 @@ public:
 				// Calculate the product for this permutation
 				T product = 1.0;
 				ostringstream product_oss;
+
+				vector<string> tokens;
 
 				for (int i = 0; i < (N - 1); i++)
 				{
@@ -164,6 +166,9 @@ public:
 					else
 						actual_col = col + 1;
 
+					if(i < N - 6)
+						tokens.push_back(to_string(actual_col));
+
 					product_oss << "v_{" << i << actual_col << "} ";
 
 					product *= vectors[i][actual_col];
@@ -176,11 +181,22 @@ public:
 						{
 							// Calculate manually
 							const signed char sign_perm = Vector_nD<T, N>::permutation_sign(base_indices);
-
+								
 							cout << (int)sign << " " << (int)sign_perm << endl;
 							cout << prev_string << "     " << str << endl;
 
-							if (sign != sign_perm)
+							cout << "token sizes: " << tokens.size() << " " << prev_tokens.size() << endl;
+
+							size_t different_count = 0;
+
+							for (size_t j = 0; j < prev_tokens.size(); j++)
+							{
+								if (prev_tokens[j] != tokens[j])
+									different_count++;
+							}
+
+							if(different_count <= 1)// prev_tokens.size())
+							//if (sign != sign_perm)
 							{
 								swap_count++;
 								cout << "swapping parity" << endl;
@@ -201,6 +217,8 @@ public:
 						}
 					}
 				}
+
+				prev_tokens = tokens;
 
 				term_index++;
 
@@ -309,7 +327,7 @@ int main(int argc, char** argv)
 {
 	srand(static_cast<unsigned int>(time(0)));
 
-	const size_t N = 6;
+	const size_t N = 10;
 
 	MatrixX<double> m(N, N);
 
