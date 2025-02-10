@@ -131,7 +131,7 @@ public:
 			size_t term_index = 0;
 			bool parity = false;
 
-			if (N < 6)
+			if (N <= 6)
 				parity = true;
 
 			//long signed int prev_coeff_index = -1;
@@ -195,7 +195,7 @@ public:
 									different_count++;
 							}
 
-							if (N < 8 || different_count < N - 6)// prev_tokens.size())
+							if (different_count <= 1)// prev_tokens.size())
 								//if (sign != sign_perm)
 							{
 								swap_count++;
@@ -327,7 +327,7 @@ int main(int argc, char** argv)
 {
 	srand(static_cast<unsigned int>(time(0)));
 
-	const size_t N = 9;
+	const size_t N = 10;
 
 	MatrixX<double> m(N, N);
 
