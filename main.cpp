@@ -129,9 +129,9 @@ public:
 		for (int k = 0; k < N; k++)
 		{
 			size_t term_index = 0;
-			bool parity = true;
+			bool parity = false;
 
-			if (N <= 6)
+			if (N < 6)
 				parity = true;
 
 			//long signed int prev_coeff_index = -1;
@@ -166,7 +166,7 @@ public:
 					else
 						actual_col = col + 1;
 
-					if(i < N - 6)
+					if (i < N - 6)
 						tokens.push_back(to_string(actual_col));
 
 					product_oss << "v_{" << i << actual_col << "} ";
@@ -181,7 +181,7 @@ public:
 						{
 							// Calculate manually
 							const signed char sign_perm = Vector_nD<T, N>::permutation_sign(base_indices);
-								
+
 							cout << (int)sign << " " << (int)sign_perm << endl;
 							cout << prev_string << "     " << str << endl;
 
@@ -195,8 +195,8 @@ public:
 									different_count++;
 							}
 
-							if(different_count <= 1)// prev_tokens.size())
-							//if (sign != sign_perm)
+							if (different_count <= 1)// prev_tokens.size())
+								//if (sign != sign_perm)
 							{
 								swap_count++;
 								cout << "swapping parity" << endl;
@@ -327,7 +327,7 @@ int main(int argc, char** argv)
 {
 	srand(static_cast<unsigned int>(time(0)));
 
-	const size_t N = 10;
+	const size_t N = 9;
 
 	MatrixX<double> m(N, N);
 
