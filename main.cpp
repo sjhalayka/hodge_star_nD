@@ -182,10 +182,10 @@ public:
 							// Calculate manually
 							const signed char sign_perm = Vector_nD<T, N>::permutation_sign(base_indices);
 
-							cout << (int)sign << " " << (int)sign_perm << endl;
-							cout << prev_string << "     " << str << endl;
+							//cout << (int)sign << " " << (int)sign_perm << endl;
+							//cout << prev_string << "     " << str << endl;
 
-							cout << "token sizes: " << tokens.size() << " " << prev_tokens.size() << endl;
+							//cout << "token sizes: " << tokens.size() << " " << prev_tokens.size() << endl;
 
 							size_t different_count = 0;
 
@@ -195,16 +195,17 @@ public:
 									different_count++;
 							}
 
-							//long signed int x = 1;
+							long signed int x = 1;
 
-							//if (N > 9)
-							//	x = N - 6 - 2;
+							// If N >= 10, then cheat
+							if (N >= 10 && sign != sign_perm)
+								x = N - 6;
 
-							if (different_count <= 1)
+							if (different_count <= x)
 								//if (sign != sign_perm)
 							{
 								swap_count++;
-								cout << "swapping parity" << endl;
+								//cout << "swapping parity" << endl;
 
 								parity = !parity;
 								sign = -sign;
@@ -213,7 +214,7 @@ public:
 							else
 							{
 								no_swap_count++;
-								cout << "not swapping parity" << endl;
+								//cout << "not swapping parity" << endl;
 								//exit(0);
 							}
 
@@ -332,7 +333,7 @@ int main(int argc, char** argv)
 {
 	srand(static_cast<unsigned int>(time(0)));
 
-	const size_t N = 8;
+	const size_t N = 10;
 
 	MatrixX<double> m(N, N);
 
