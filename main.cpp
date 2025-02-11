@@ -167,7 +167,7 @@ public:
 						actual_col = col + 1;
 
 					if (i < N - 6)
-						tokens.push_back(to_string(actual_col));
+						tokens.push_back(to_string(i) + to_string(actual_col));
 
 					product_oss << "v_{" << i << actual_col << "} ";
 
@@ -175,7 +175,7 @@ public:
 
 					if (N >= 6 && i == N - 6)
 					{
-						string str = to_string(actual_col);// product_oss.str();
+						string str = to_string(i) + to_string(actual_col);// product_oss.str();
 
 						if (prev_string != str)
 						{
@@ -195,7 +195,12 @@ public:
 									different_count++;
 							}
 
-							if (different_count <= 1)// prev_tokens.size())
+							//long signed int x = 1;
+
+							//if (N > 9)
+							//	x = N - 6 - 2;
+
+							if (different_count <= 1)
 								//if (sign != sign_perm)
 							{
 								swap_count++;
@@ -327,7 +332,7 @@ int main(int argc, char** argv)
 {
 	srand(static_cast<unsigned int>(time(0)));
 
-	const size_t N = 10;
+	const size_t N = 8;
 
 	MatrixX<double> m(N, N);
 
