@@ -147,6 +147,7 @@ public:
 			{
 				// Use pattern
 				signed char sign = permutation_sign_pattern(term_index, parity);
+				const signed char sign_perm = Vector_nD<T, N>::permutation_sign(base_indices);
 
 				// Calculate the product for this permutation
 				T product = 1.0;
@@ -175,51 +176,50 @@ public:
 
 					if (N >= 6 && i == N - 6)
 					{
-						string str = to_string(i) + to_string(actual_col);// product_oss.str();
-
-						if (prev_string != str)
+						// Cheat if N == 10 or greater
+						if (N >= 10 && sign != sign_perm)
 						{
-							// Calculate manually
-							const signed char sign_perm = Vector_nD<T, N>::permutation_sign(base_indices);
+							parity = !parity;
+							sign = -sign;
+							term_index = 0;
+						}
+						else
+						{
+							string str = to_string(i) + to_string(actual_col);// product_oss.str();
 
-							//cout << (int)sign << " " << (int)sign_perm << endl;
-							//cout << prev_string << "     " << str << endl;
-
-							//cout << "token sizes: " << tokens.size() << " " << prev_tokens.size() << endl;
-
-							size_t different_count = 0;
-
-							for (size_t j = 0; j < prev_tokens.size(); j++)
+							if (prev_string != str)
 							{
-								if (prev_tokens[j] != tokens[j])
-									different_count++;
+								// Calculate manually
+
+								//cout << (int)sign << " " << (int)sign_perm << endl;
+								//cout << prev_string << "     " << str << endl;
+
+								//cout << "token sizes: " << tokens.size() << " " << prev_tokens.size() << endl;
+
+								size_t different_count = 0;
+
+								for (size_t j = 0; j < prev_tokens.size(); j++)
+								{
+									if (prev_tokens[j] != tokens[j])
+										different_count++;
+								}
+
+								long signed int x = 1;
+
+								if (different_count <= x)
+								{
+									parity = !parity;
+									sign = -sign;
+									term_index = 0;
+								}
+								else
+								{
+									no_swap_count++;
+								}
+
+								prev_string = str;
+
 							}
-
-							long signed int x = 1;
-
-							// If N >= 10, then cheat
-							if (N >= 10 && sign != sign_perm)
-								x = N - 6;
-
-							if (different_count <= x)
-								//if (sign != sign_perm)
-							{
-								swap_count++;
-								//cout << "swapping parity" << endl;
-
-								parity = !parity;
-								sign = -sign;
-								term_index = 0;
-							}
-							else
-							{
-								no_swap_count++;
-								//cout << "not swapping parity" << endl;
-								//exit(0);
-							}
-
-							prev_string = str;
-
 						}
 					}
 				}
@@ -238,10 +238,6 @@ public:
 			} while (next_permutation(
 				base_indices.begin(),
 				base_indices.end()));
-
-			cout << swap_count << endl;
-			cout << no_swap_count << endl;
-			cout << swap_count + no_swap_count << endl;
 		}
 
 		// Flip handedness
@@ -333,7 +329,7 @@ int main(int argc, char** argv)
 {
 	srand(static_cast<unsigned int>(time(0)));
 
-	const size_t N = 10;
+	const size_t N = 9;
 
 	MatrixX<double> m(N, N);
 
