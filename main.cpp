@@ -177,7 +177,7 @@ public:
 					if (N >= 6 && i == N - 6)
 					{
 						// Cheat if N == 10 or greater
-						if (N >= 10)
+						if (0)//N >= 10)
 						{
 							if (sign != sign_perm)
 							{
@@ -188,7 +188,7 @@ public:
 						}
 						else
 						{
-							string str = product_oss.str();
+							string str = to_string(actual_col);// product_oss.str();
 
 							//							if( tokens.end() == find( tokens.begin(),  tokens.end(), str))
 							if (prev_string != str)
@@ -238,6 +238,9 @@ public:
 			} while (next_permutation(
 				base_indices.begin(),
 				base_indices.end()));
+
+			cout << "*" << endl;
+
 		}
 
 		// Flip handedness
