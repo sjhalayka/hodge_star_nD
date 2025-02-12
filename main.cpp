@@ -136,12 +136,12 @@ public:
 
 			//long signed int prev_coeff_index = -1;
 
-			string prev_string = "";
+			size_t prev_string = 0;// = "";
 
 			size_t swap_count = 0;
 			size_t no_swap_count = 0;
 
-			vector<string> prev_tokens;
+			vector<size_t> prev_tokens;
 
 			do
 			{
@@ -153,7 +153,7 @@ public:
 				T product = 1.0;
 				ostringstream product_oss;
 
-				vector<string> tokens;
+				vector<size_t> tokens;
 
 				for (int i = 0; i < (N - 1); i++)
 				{
@@ -168,7 +168,7 @@ public:
 						actual_col = col + 1;
 
 					if (i < N - 6)
-						tokens.push_back(to_string(actual_col));
+						tokens.push_back(actual_col);
 
 					product_oss << "v_{" << i << actual_col << "} ";
 
@@ -177,7 +177,7 @@ public:
 					if (N >= 6 && i == N - 6)
 					{
 						// Cheat if N == 10 or greater
-						if (0)//N >= 10)
+						if (N >= 10)
 						{
 							if (sign != sign_perm)
 							{
@@ -188,7 +188,7 @@ public:
 						}
 						else
 						{
-							string str = to_string(actual_col);// product_oss.str();
+							size_t str = actual_col;// product_oss.str();
 
 							//							if( tokens.end() == find( tokens.begin(),  tokens.end(), str))
 							if (prev_string != str)
