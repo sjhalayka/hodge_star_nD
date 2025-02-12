@@ -188,7 +188,7 @@ public:
 						}
 						else
 						{
-							string str = to_string(actual_col);// product_oss.str();
+							string str = product_oss.str();
 
 							//							if( tokens.end() == find( tokens.begin(),  tokens.end(), str))
 							if (prev_string != str)
