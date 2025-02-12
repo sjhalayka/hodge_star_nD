@@ -168,7 +168,7 @@ public:
 						actual_col = col + 1;
 
 					if (i < N - 6)
-						tokens.push_back(to_string(col));
+						tokens.push_back(to_string(actual_col));
 
 					product_oss << "v_{" << i << actual_col << "} ";
 
@@ -177,7 +177,7 @@ public:
 					if (N >= 6 && i == N - 6)
 					{
 						// Cheat if N == 10 or greater
-						if (0)//N >= 10)
+						if (N >= 10)
 						{
 							if (sign != sign_perm)
 							{
@@ -188,9 +188,9 @@ public:
 						}
 						else
 						{
-							string str = to_string(col);// product_oss.str();
+							string str = to_string(actual_col);// product_oss.str();
 
-//							if( tokens.end() == find( tokens.begin(),  tokens.end(), str))
+							//							if( tokens.end() == find( tokens.begin(),  tokens.end(), str))
 							if (prev_string != str)
 							{
 								// Calculate manually
