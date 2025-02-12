@@ -168,7 +168,7 @@ public:
 						actual_col = col + 1;
 
 					if (i < N - 6)
-						tokens.push_back(to_string(i) + to_string(actual_col));
+						tokens.push_back(to_string(col));
 
 					product_oss << "v_{" << i << actual_col << "} ";
 
@@ -177,16 +177,20 @@ public:
 					if (N >= 6 && i == N - 6)
 					{
 						// Cheat if N == 10 or greater
-						if (N >= 10 && sign != sign_perm)
+						if (0)//N >= 10)
 						{
-							parity = !parity;
-							sign = -sign;
-							term_index = 0;
+							if (sign != sign_perm)
+							{
+								parity = !parity;
+								sign = -sign;
+								term_index = 0;
+							}
 						}
 						else
 						{
-							string str = to_string(i) + to_string(actual_col);// product_oss.str();
+							string str = to_string(col);// product_oss.str();
 
+//							if( tokens.end() == find( tokens.begin(),  tokens.end(), str))
 							if (prev_string != str)
 							{
 								// Calculate manually
@@ -211,10 +215,6 @@ public:
 									parity = !parity;
 									sign = -sign;
 									term_index = 0;
-								}
-								else
-								{
-									no_swap_count++;
 								}
 
 								prev_string = str;
