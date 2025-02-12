@@ -136,12 +136,12 @@ public:
 
 			//long signed int prev_coeff_index = -1;
 
-			size_t prev_string = 0;// = "";
+			string prev_string = "";
 
 			size_t swap_count = 0;
 			size_t no_swap_count = 0;
 
-			vector<size_t> prev_tokens;
+			vector<string> prev_tokens;
 
 			do
 			{
@@ -153,7 +153,7 @@ public:
 				T product = 1.0;
 				ostringstream product_oss;
 
-				vector<size_t> tokens;
+				vector<string> tokens;
 
 				for (int i = 0; i < (N - 1); i++)
 				{
@@ -168,7 +168,7 @@ public:
 						actual_col = col + 1;
 
 					if (i < N - 6)
-						tokens.push_back(actual_col);
+						tokens.push_back(to_string(actual_col));
 
 					product_oss << "v_{" << i << actual_col << "} ";
 
@@ -188,7 +188,7 @@ public:
 						}
 						else
 						{
-							size_t str = actual_col;// product_oss.str();
+							string str = to_string(actual_col);// product_oss.str();
 
 							//							if( tokens.end() == find( tokens.begin(),  tokens.end(), str))
 							if (prev_string != str)
@@ -332,7 +332,7 @@ int main(int argc, char** argv)
 {
 	srand(static_cast<unsigned int>(time(0)));
 
-	const size_t N = 9;
+	const size_t N = 10;
 
 	MatrixX<double> m(N, N);
 
