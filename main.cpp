@@ -177,7 +177,7 @@ public:
 					if (N >= 6 && i == N - 6)
 					{
 						// Cheat if N == 10 or greater
-						if (N >= 10)
+						if (0)//N >= 10)
 						{
 							if (sign != sign_perm)
 							{
@@ -190,9 +190,13 @@ public:
 						{
 							string str = to_string(actual_col);// product_oss.str();
 
-							//							if( tokens.end() == find( tokens.begin(),  tokens.end(), str))
 							if (prev_string != str)
 							{
+								if(prev_tokens.size() > 0)
+									prev_tokens[prev_tokens.size() - 1] = prev_string;
+
+								if(tokens.size() > 0)
+									tokens[tokens.size() - 1] = str;
 								// Calculate manually
 
 								//cout << (int)sign << " " << (int)sign_perm << endl;
@@ -208,9 +212,11 @@ public:
 										different_count++;
 								}
 
-								long signed int x = 1;
+								long signed int x = prev_tokens.size();
+								if (x < 0)
+									x = 0;
 
-								if (different_count <= x)
+								if (different_count <= 1 || different_count == prev_tokens.size())//>= prev_tokens.size() - 2)
 								{
 									parity = !parity;
 									sign = -sign;
@@ -218,13 +224,14 @@ public:
 								}
 
 								prev_string = str;
+								prev_tokens = tokens;
 
 							}
 						}
 					}
 				}
 
-				prev_tokens = tokens;
+				
 
 				term_index++;
 
