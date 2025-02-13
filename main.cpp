@@ -191,17 +191,19 @@ public:
 							if (prev_tokens.size() == 0)
 								prev_tokens = tokens;
 
-							if ((prev_tokens.size() > 0 && tokens.size() > 0) && prev_tokens[prev_tokens.size() - 1] != tokens[tokens.size() - 1])// prev_string != str)
-							{
-								//if (prev_tokens.size() > 0)
-								//	prev_tokens[prev_tokens.size() - 1] = prev_string;
+							size_t different_count = 0;
 
-								//if (tokens.size() > 0)
-								//	tokens[tokens.size() - 1] = str;
+							for (size_t j = 0; j < prev_tokens.size(); j++)
+							{
+								if (prev_tokens[j] != tokens[j])
+									different_count++;
+							}
+
+							if ((prev_tokens.size() > 0 && tokens.size() > 0) && prev_tokens[prev_tokens.size() - 1] != tokens[tokens.size() - 1])
+							{
 								// Calculate manually
 
 								//cout << (int)sign << " " << (int)sign_perm << endl;
-								//cout << prev_string << "     " << str << endl;
 
 								//cout << "token sizes: " << prev_tokens.size() << " " << tokens.size() << endl;
 
@@ -218,13 +220,7 @@ public:
 
 
 
-								size_t different_count = 0;
 
-								for (size_t j = 0; j < prev_tokens.size(); j++)
-								{
-									if (prev_tokens[j] != tokens[j])
-										different_count++;
-								}
 
 								//if (N >= 10)
 								//{
@@ -246,7 +242,7 @@ public:
 								//}
 								//else
 								{
-									if (different_count <= 2 || different_count == prev_tokens.size())
+									if (different_count <= 2)//prev_tokens.size())
 									{
 										parity = !parity;
 										sign = -sign;
@@ -257,12 +253,7 @@ public:
 								prev_tokens = tokens;
 
 							}
-							
-	
 						}
-
-						
-
 					}
 				}
 
@@ -374,7 +365,7 @@ int main(int argc, char** argv)
 {
 	srand(static_cast<unsigned int>(time(0)));
 
-	const size_t N = 10;
+	const size_t N = 9;
 
 	MatrixX<double> m(N, N);
 
