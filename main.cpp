@@ -192,10 +192,10 @@ public:
 
 							if (prev_string != str)
 							{
-								if(prev_tokens.size() > 0)
+								if (prev_tokens.size() > 0)
 									prev_tokens[prev_tokens.size() - 1] = prev_string;
 
-								if(tokens.size() > 0)
+								if (tokens.size() > 0)
 									tokens[tokens.size() - 1] = str;
 								// Calculate manually
 
@@ -216,11 +216,23 @@ public:
 								if (x < 0)
 									x = 0;
 
-								if (different_count <= 1 || different_count == prev_tokens.size())//>= prev_tokens.size() - 2)
+								if (N >= 10)
 								{
-									parity = !parity;
-									sign = -sign;
-									term_index = 0;
+									if (different_count <= 1 || different_count == prev_tokens.size())//>= prev_tokens.size() - 2)
+									{
+										parity = !parity;
+										sign = -sign;
+										term_index = 0;
+									}
+								}
+								else
+								{
+									if (different_count <= 1)//>= prev_tokens.size() - 2)
+									{
+										parity = !parity;
+										sign = -sign;
+										term_index = 0;
+									}
 								}
 
 								prev_string = str;
@@ -231,7 +243,7 @@ public:
 					}
 				}
 
-				
+
 
 				term_index++;
 
