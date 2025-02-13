@@ -131,12 +131,11 @@ public:
 			size_t term_index = 0;
 			bool parity = false;
 
-			if (N < 6)
+//			if (N <= 6)
 				parity = true;
+//			if (N <= 6)\
 
 			//long signed int prev_coeff_index = -1;
-
-			string prev_string = "";
 
 			size_t swap_count = 0;
 			size_t no_swap_count = 0;
@@ -189,12 +188,10 @@ public:
 						}
 						else
 						{
-							string str = to_string(i) + "_" + to_string(actual_col);// product_oss.str();
-
 							if (prev_tokens.size() == 0)
 								prev_tokens = tokens;
 
-							if (prev_string != str)
+							if ((prev_tokens.size() > 0 && tokens.size() > 0) && prev_tokens[prev_tokens.size() - 1] != tokens[tokens.size() - 1])// prev_string != str)
 							{
 								//if (prev_tokens.size() > 0)
 								//	prev_tokens[prev_tokens.size() - 1] = prev_string;
@@ -249,7 +246,7 @@ public:
 								//}
 								//else
 								{
-									if (different_count <= 2)//>= prev_tokens.size() - 2)
+									if (different_count <= 2 || different_count == prev_tokens.size())
 									{
 										parity = !parity;
 										sign = -sign;
@@ -257,9 +254,6 @@ public:
 									}
 								}
 
-
-
-								prev_string = str;
 								prev_tokens = tokens;
 
 							}
@@ -380,7 +374,7 @@ int main(int argc, char** argv)
 {
 	srand(static_cast<unsigned int>(time(0)));
 
-	const size_t N = 9;
+	const size_t N = 10;
 
 	MatrixX<double> m(N, N);
 
