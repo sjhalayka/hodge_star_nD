@@ -168,7 +168,7 @@ public:
 					else
 						actual_col = col + 1;
 
-					if (i < N - 6)
+					//if (i < N - 6)
 						tokens.push_back(to_string(i) + "_" + to_string(actual_col));
 
 					product_oss << "v_{" << i << actual_col << "} ";
@@ -194,16 +194,8 @@ public:
 							if (prev_tokens.size() == 0)
 								prev_tokens = tokens;
 
-							//bool last_changed = false;
-
-							//if (prev_tokens.size() > 0 && tokens.size() > 0)
-							//	if (prev_tokens[prev_tokens.size() - 1] != tokens[tokens.size() - 1])
-							//		last_changed = true;
-
 							if (prev_string != str)
 							{
-
-
 								//if (prev_tokens.size() > 0)
 								//	prev_tokens[prev_tokens.size() - 1] = prev_string;
 
@@ -211,20 +203,20 @@ public:
 								//	tokens[tokens.size() - 1] = str;
 								// Calculate manually
 
-								cout << (int)sign << " " << (int)sign_perm << endl;
-								cout << prev_string << "     " << str << endl;
+								//cout << (int)sign << " " << (int)sign_perm << endl;
+								//cout << prev_string << "     " << str << endl;
 
-								cout << "token sizes: " << prev_tokens.size() << " " << tokens.size() << endl;
+								//cout << "token sizes: " << prev_tokens.size() << " " << tokens.size() << endl;
 
-								for (size_t i = 0; i < prev_tokens.size(); i++)
-									cout << prev_tokens[i] << ' ' << endl;
+								//for (size_t i = 0; i < prev_tokens.size(); i++)
+								//	cout << prev_tokens[i] << ' ' << endl;
 
-								cout << endl;
+								//cout << endl;
 
-								for (size_t i = 0; i < tokens.size(); i++)
-									cout << tokens[i] << ' ' << endl;
+								//for (size_t i = 0; i < tokens.size(); i++)
+								//	cout << tokens[i] << ' ' << endl;
 
-								cout << endl;
+								//cout << endl;
 
 
 
@@ -236,6 +228,8 @@ public:
 									if (prev_tokens[j] != tokens[j])
 										different_count++;
 								}
+
+								//cout << "different count" << different_count << endl;
 
 								//if (N >= 10)
 								//{
@@ -255,7 +249,7 @@ public:
 								//}
 								//else
 								{
-									if (different_count <= 1)//>= prev_tokens.size() - 2)
+									if (different_count <= 2)//>= prev_tokens.size() - 2)
 									{
 										parity = !parity;
 										sign = -sign;
@@ -264,23 +258,28 @@ public:
 								}
 
 								prev_string = str;
-							
+
 
 							}
+
+	
 						}
+
+						prev_tokens = tokens;
+
 					}
 				}
 
-				prev_tokens = tokens;
+
 
 				term_index++;
 
 				result[k] += sign * product;
 
-				if (sign == 1)
-					cout << "x_{" << k << "} += " << product_oss.str() << endl;
-				else
-					cout << "x_{" << k << "} -= " << product_oss.str() << endl;
+				//if (sign == 1)
+				//	cout << "x_{" << k << "} += " << product_oss.str() << endl;
+				//else
+				//	cout << "x_{" << k << "} -= " << product_oss.str() << endl;
 
 			} while (next_permutation(
 				base_indices.begin(),
