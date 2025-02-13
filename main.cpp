@@ -155,6 +155,7 @@ public:
 
 				vector<string> tokens;
 
+
 				for (int i = 0; i < (N - 1); i++)
 				{
 					const int col = base_indices[i];
@@ -168,7 +169,7 @@ public:
 						actual_col = col + 1;
 
 					if (i < N - 6)
-						tokens.push_back(to_string(actual_col));
+						tokens.push_back(to_string(i) + "_" + to_string(actual_col));
 
 					product_oss << "v_{" << i << actual_col << "} ";
 
@@ -177,7 +178,7 @@ public:
 					if (N >= 6 && i == N - 6)
 					{
 						// Cheat if N == 10 or greater
-						if (0)//N >= 10)
+						if (N >= 10)
 						{
 							if (sign != sign_perm)
 							{
@@ -188,21 +189,45 @@ public:
 						}
 						else
 						{
-							string str = to_string(actual_col);// product_oss.str();
+							string str = to_string(i) + "_" + to_string(actual_col);// product_oss.str();
+
+							if (prev_tokens.size() == 0)
+								prev_tokens = tokens;
+
+							//bool last_changed = false;
+
+							//if (prev_tokens.size() > 0 && tokens.size() > 0)
+							//	if (prev_tokens[prev_tokens.size() - 1] != tokens[tokens.size() - 1])
+							//		last_changed = true;
 
 							if (prev_string != str)
 							{
-								if (prev_tokens.size() > 0)
-									prev_tokens[prev_tokens.size() - 1] = prev_string;
 
-								if (tokens.size() > 0)
-									tokens[tokens.size() - 1] = str;
+
+								//if (prev_tokens.size() > 0)
+								//	prev_tokens[prev_tokens.size() - 1] = prev_string;
+
+								//if (tokens.size() > 0)
+								//	tokens[tokens.size() - 1] = str;
 								// Calculate manually
 
-								//cout << (int)sign << " " << (int)sign_perm << endl;
-								//cout << prev_string << "     " << str << endl;
+								cout << (int)sign << " " << (int)sign_perm << endl;
+								cout << prev_string << "     " << str << endl;
 
-								//cout << "token sizes: " << tokens.size() << " " << prev_tokens.size() << endl;
+								cout << "token sizes: " << prev_tokens.size() << " " << tokens.size() << endl;
+
+								for (size_t i = 0; i < prev_tokens.size(); i++)
+									cout << prev_tokens[i] << ' ' << endl;
+
+								cout << endl;
+
+								for (size_t i = 0; i < tokens.size(); i++)
+									cout << tokens[i] << ' ' << endl;
+
+								cout << endl;
+
+
+
 
 								size_t different_count = 0;
 
@@ -212,20 +237,23 @@ public:
 										different_count++;
 								}
 
-								long signed int x = prev_tokens.size();
-								if (x < 0)
-									x = 0;
+								//if (N >= 10)
+								//{
+								//	//if (different_count == 3)
+								//	//{
+								//	//	cout << "different count:    " << different_count << endl;
+								//	//	cout << "prev_tokens.size(): " << prev_tokens.size() << endl;
+								//	//	cout << endl;
+								//	//}
 
-								if (N >= 10)
-								{
-									if (different_count <= 1 || different_count == prev_tokens.size())//>= prev_tokens.size() - 2)
-									{
-										parity = !parity;
-										sign = -sign;
-										term_index = 0;
-									}
-								}
-								else
+								//	if ((different_count <= N - 9) || different_count < (prev_tokens.size() - (N - 9)))// different_count == prev_tokens.size())//>= prev_tokens.size() - 2)
+								//	{
+								//		parity = !parity;
+								//		sign = -sign;
+								//		term_index = 0;
+								//	}
+								//}
+								//else
 								{
 									if (different_count <= 1)//>= prev_tokens.size() - 2)
 									{
@@ -236,23 +264,23 @@ public:
 								}
 
 								prev_string = str;
-								prev_tokens = tokens;
+							
 
 							}
 						}
 					}
 				}
 
-
+				prev_tokens = tokens;
 
 				term_index++;
 
 				result[k] += sign * product;
 
-				//if (sign == 1)
-				//	cout << "x_{" << k << "} += " << product_oss.str() << endl;
-				//else
-				//	cout << "x_{" << k << "} -= " << product_oss.str() << endl;
+				if (sign == 1)
+					cout << "x_{" << k << "} += " << product_oss.str() << endl;
+				else
+					cout << "x_{" << k << "} -= " << product_oss.str() << endl;
 
 			} while (next_permutation(
 				base_indices.begin(),
@@ -351,7 +379,7 @@ int main(int argc, char** argv)
 {
 	srand(static_cast<unsigned int>(time(0)));
 
-	const size_t N = 10;
+	const size_t N = 9;
 
 	MatrixX<double> m(N, N);
 
