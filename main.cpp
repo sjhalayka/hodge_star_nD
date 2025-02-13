@@ -178,7 +178,7 @@ public:
 					if (N >= 6 && i == N - 6)
 					{
 						// Cheat if N == 10 or greater
-						if (N >= 10)
+						if (0)//N >= 10)
 						{
 							if (sign != sign_perm)
 							{
@@ -229,25 +229,16 @@ public:
 										different_count++;
 								}
 
-								//cout << "different count" << different_count << endl;
-
-								//if (N >= 10)
-								//{
-								//	//if (different_count == 3)
-								//	//{
-								//	//	cout << "different count:    " << different_count << endl;
-								//	//	cout << "prev_tokens.size(): " << prev_tokens.size() << endl;
-								//	//	cout << endl;
-								//	//}
-
-								//	if ((different_count <= N - 9) || different_count < (prev_tokens.size() - (N - 9)))// different_count == prev_tokens.size())//>= prev_tokens.size() - 2)
-								//	{
-								//		parity = !parity;
-								//		sign = -sign;
-								//		term_index = 0;
-								//	}
-								//}
-								//else
+								if (N >= 10)
+								{
+									if (different_count <= 2 || different_count == prev_tokens.size())//>= prev_tokens.size() - 2)
+									{
+										parity = !parity;
+										sign = -sign;
+										term_index = 0;
+									}
+								}
+								else
 								{
 									if (different_count <= 2)//>= prev_tokens.size() - 2)
 									{
@@ -256,6 +247,8 @@ public:
 										term_index = 0;
 									}
 								}
+
+
 
 								prev_string = str;
 
@@ -378,7 +371,7 @@ int main(int argc, char** argv)
 {
 	srand(static_cast<unsigned int>(time(0)));
 
-	const size_t N = 9;
+	const size_t N = 10;
 
 	MatrixX<double> m(N, N);
 
