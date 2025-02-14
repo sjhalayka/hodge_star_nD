@@ -9,6 +9,7 @@ using namespace Eigen;
 #include <algorithm>
 #include <array>
 #include <chrono>
+#include <utility>
 using namespace std;
 
 
@@ -167,7 +168,7 @@ public:
 					else
 						actual_col = col + 1;
 
-					if (i < N - 6 + 1)
+					//if (i < N - 6 + 1)
 						tokens.push_back(to_string(i) + "_" + to_string(actual_col));
 
 					product_oss << "v_{" << i << actual_col << "} ";
@@ -222,25 +223,25 @@ public:
 
 
 
-								//if (N >= 10)
-								//{
-								//	//if (sign != sign_perm)
-								//	//{
-								//	//	parity = !parity;
-								//	//	sign = -sign;
-								//	//	term_index = 0;
-								//	//}
+								if (N >= 10)
+								{
+									//if (sign != sign_perm)
+									//{
+									//	parity = !parity;
+									//	sign = -sign;
+									//	term_index = 0;
+									//}
 
-
-								//	if (different_count <= 2 || different_count >= prev_tokens.size() - 1)
-								//	//if (different_count <= 2 || different_count == prev_tokens.size())//>= prev_tokens.size() - 2)
-								//	{
-								//		parity = !parity;
-								//		sign = -sign;
-								//		term_index = 0;
-								//	}
-								//}
-								//else
+									//cout << N << " " << prev_tokens.size() << endl;
+									
+									if (different_count <= 2 || different_count == prev_tokens.size())//>= prev_tokens.size() - 2)
+									{
+										parity = !parity;
+										sign = -sign;
+										term_index = 0;
+									}
+								}
+								else
 								{
 									if (different_count <= 2)//prev_tokens.size())
 									{
@@ -365,7 +366,7 @@ int main(int argc, char** argv)
 {
 	srand(static_cast<unsigned int>(time(0)));
 
-	const size_t N = 9;
+	const size_t N = 10;
 
 	MatrixX<double> m(N, N);
 
