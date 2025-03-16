@@ -132,11 +132,11 @@ public:
 			size_t term_index = 0;
 			bool parity = false;
 
-//			if (N <= 6)
-				parity = true;
-//			if (N <= 6)\
+			//			if (N <= 6)
+			parity = true;
+			//			if (N <= 6)\
 
-			//long signed int prev_coeff_index = -1;
+						//long signed int prev_coeff_index = -1;
 
 			size_t swap_count = 0;
 			size_t no_swap_count = 0;
@@ -169,7 +169,7 @@ public:
 						actual_col = col + 1;
 
 					//if (i < N - 6 + 1)
-						tokens.push_back(to_string(i) + "_" + to_string(actual_col));
+					tokens.push_back(to_string(i) + "_" + to_string(actual_col));
 
 					product_oss << "v_{" << i << actual_col << "} ";
 
@@ -177,88 +177,30 @@ public:
 
 					if (N >= 6 && i == N - 6)
 					{
-						// Cheat if N == 10 or greater
-						if (0)//N >= 10)
+						if (prev_tokens.size() == 0)
+							prev_tokens = tokens;
+
+						size_t different_count = 0;
+
+						for (size_t j = 0; j < prev_tokens.size(); j++)
 						{
-							if (sign != sign_perm)
+							if (prev_tokens[j] != tokens[j])
+								different_count++;
+						}
+
+						if ((prev_tokens.size() > 0 && tokens.size() > 0) && prev_tokens[prev_tokens.size() - 1] != tokens[tokens.size() - 1])
+						{
+							if (different_count <= 2)
 							{
 								parity = !parity;
 								sign = -sign;
 								term_index = 0;
 							}
 						}
-						else
-						{
-							if (prev_tokens.size() == 0)
-								prev_tokens = tokens;
 
-							size_t different_count = 0;
-
-							for (size_t j = 0; j < prev_tokens.size(); j++)
-							{
-								if (prev_tokens[j] != tokens[j])
-									different_count++;
-							}
-
-							if ((prev_tokens.size() > 0 && tokens.size() > 0) && prev_tokens[prev_tokens.size() - 1] != tokens[tokens.size() - 1])
-							{
-								// Calculate manually
-
-								//cout << (int)sign << " " << (int)sign_perm << endl;
-
-								//cout << "token sizes: " << prev_tokens.size() << " " << tokens.size() << endl;
-
-								//for (size_t i = 0; i < prev_tokens.size(); i++)
-								//	cout << prev_tokens[i] << ' ' << endl;
-
-								//cout << endl;
-
-								//for (size_t i = 0; i < tokens.size(); i++)
-								//	cout << tokens[i] << ' ' << endl;
-
-								//cout << endl;
-
-
-
-
-
-
-								if (N >= 10)
-								{
-									//if (sign != sign_perm)
-									//{
-									//	parity = !parity;
-									//	sign = -sign;
-									//	term_index = 0;
-									//}
-
-									//cout << N << " " << prev_tokens.size() << endl;
-									
-									if (different_count <= 2 || different_count == prev_tokens.size())//>= prev_tokens.size() - 2)
-									{
-										parity = !parity;
-										sign = -sign;
-										term_index = 0;
-									}
-								}
-								else
-								{
-									if (different_count <= 2)//prev_tokens.size())
-									{
-										parity = !parity;
-										sign = -sign;
-										term_index = 0;
-									}
-								}
-
-								prev_tokens = tokens;
-
-							}
-						}
+						prev_tokens = tokens;
 					}
 				}
-
-
 
 				term_index++;
 
@@ -366,7 +308,7 @@ int main(int argc, char** argv)
 {
 	srand(static_cast<unsigned int>(time(0)));
 
-	const size_t N = 10;
+	const size_t N = 9;
 
 	MatrixX<double> m(N, N);
 
