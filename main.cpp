@@ -147,7 +147,6 @@ public:
 			{
 				// Use pattern
 				signed char sign = permutation_sign_pattern(term_index, parity);
-				const signed char sign_perm = Vector_nD<T, N>::permutation_sign(base_indices);
 
 				// Calculate the product for this permutation
 				T product = 1.0;
